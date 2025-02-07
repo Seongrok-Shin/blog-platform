@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import MainNav from "@/components/navigation/MainNav";
+import ClientProviders from "@/components/providers/ClientProviders";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -15,11 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <meta name="grammarly-disable-editor" content="true" />
-      </head>
-      <body className={`${inter.variable} font-sans`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
+        <ClientProviders>
+          <MainNav />
+          <main>{children}</main>
+        </ClientProviders>
+      </body>
     </html>
   );
 }
