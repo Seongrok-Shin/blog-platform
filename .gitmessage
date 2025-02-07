@@ -1,12 +1,15 @@
 Commit message
 
 ## Context:
+
 Explains the background or circumstances that led to the change
 Answers "why is this change needed?"
 
 ## Intent:
+
 Describes what the change is trying to accomplish
 Answers "what is this change doing?"
 
 ## Note:
+
 Additional important information about the change
