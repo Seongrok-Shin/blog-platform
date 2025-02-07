@@ -1,18 +1,15 @@
-Add E2E testing with Playwright
+Commit message
 
 ## Context:
-- Project needs automated testing to ensure reliability
-- End-to-end testing is crucial for validating user flows
-- Need to verify critical UI components and interactions
+
+Explains the background or circumstances that led to the change
+Answers "why is this change needed?"
 
 ## Intent:
-- Set up Playwright as E2E testing framework
-- Create initial test suite for homepage
-- Add GitHub Actions workflow for automated testing
-- Update documentation with testing instructions
+
+Describes what the change is trying to accomplish
+Answers "what is this change doing?"
 
 ## Note:
-- Tests verify homepage content and metadata
-- Added test:e2e npm script for running tests
-- Tests run in headless mode by default
-- Supports multiple browsers (Chromium, Firefox, WebKit)
+
+Additional important information about the change
