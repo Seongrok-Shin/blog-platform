@@ -20,6 +20,7 @@ A modern, full-stack blog platform built with Next.js 14, TypeScript, and Tailwi
 - **Styling:** Tailwind CSS
 - **Linting:** ESLint
 - **Code Formatting:** Prettier
+- **Testing:** Playwright (E2E)
 - **Authentication:** (TBD)
 - **Database:** (TBD)
 
@@ -74,6 +75,23 @@ blog-platform/
 ## Development
 
 You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
+
+### Testing
+
+The project uses Playwright for End-to-End testing. To run the tests:
+
+```bash
+# Run tests in headless mode
+npm run test:e2e
+
+# Run tests with UI
+npm run test:e2e -- --ui
+
+# Run tests in a specific browser
+npm run test:e2e -- --project=chromium
+```
+
+Test files are located in the `tests` directory and follow the naming pattern `*.spec.ts`.
 
 ## Contributing
 

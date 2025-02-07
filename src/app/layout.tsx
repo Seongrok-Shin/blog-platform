@@ -16,6 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="grammarly-disable-editor" content="true" />
+      </head>
       <body className={`${inter.variable} font-sans`}>{children}</body>
     </html>
   );
