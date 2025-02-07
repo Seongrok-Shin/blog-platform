@@ -85,7 +85,7 @@ The project uses Playwright for End-to-End testing. To run the tests:
 npm run test:e2e
 
 # Run tests with UI
-npm run test:e2e -- --ui
+npm run test:e2e:ui
 
 # Run tests in a specific browser
 npm run test:e2e -- --project=chromium
