@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import MainNav from "@/components/navigation/MainNav";
+import Nav from "@/components/navigation/Nav";
+import Footer from "@/components/Footer";
 import ClientProviders from "@/components/providers/ClientProviders";
 import "./globals.css";
 
@@ -20,8 +21,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans`} suppressHydrationWarning>
         <ClientProviders>
-          <MainNav />
-          <main>{children}</main>
+          <div className="flex min-h-screen flex-col">
+            <Nav />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
         </ClientProviders>
       </body>
     </html>
