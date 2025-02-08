@@ -1,6 +1,6 @@
 import Link from "next/link";
 import MobileMenuButton from "./MobileMenuButton";
-import NavLinks from "./NavLinks";
+import NavLink from "./NavLink";
 
 const navigationItems = [
   { href: "/", label: "Home" },
@@ -9,7 +9,7 @@ const navigationItems = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function MainNav() {
+export default function Nav() {
   return (
     <nav className="border-b border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -23,7 +23,11 @@ export default function MainNav() {
             </div>
             {/* Desktop navigation */}
             <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
-              <NavLinks items={navigationItems} />
+              {navigationItems.map((item) => (
+                <NavLink key={item.href} href={item.href}>
+                  {item.label}
+                </NavLink>
+              ))}
             </div>
           </div>
 
