@@ -19,9 +19,11 @@ export interface Post {
     name: string;
     image: string;
   };
-  coverImage?: string;
+  coverImage: string;
 }
 
 export interface PostListProps {
   posts: Post[];
 }
+
+export type PostParams = Promise<{ slug: string }>;
