@@ -21,8 +21,11 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -30,6 +33,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.50.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
