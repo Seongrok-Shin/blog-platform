@@ -2,6 +2,15 @@
   "name": "blog-platform",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Seongrok Shin",
+    "url": "https://markshin.me/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Seongrok-Shin/blog-platform"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
