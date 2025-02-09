@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-interface MobileMenuProps {
-  isOpen: boolean;
-  onClose?: () => void;
-}
+import type { MobileMenuProps } from "@/types/navigation";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
