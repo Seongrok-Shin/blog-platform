@@ -51,9 +51,9 @@ function getPostBySlug(slug: string): Post | undefined {
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string } | Promise<{ slug: string }>;
 }) {
-  const resolvedParams = await Promise.resolve(params);
+  const resolvedParams = await params;
   const post = getPostBySlug(resolvedParams.slug);
 
   if (!post) {
