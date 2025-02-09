@@ -3,20 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { MobileMenuProps } from "@/types/navigation";
-import { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  if (!isOpen) return null;
 
-  if (!mounted || !isOpen) return null;
-
-  return ReactDOM.createPortal(
+  return (
     <>
       {/* Backdrop */}
       <div
@@ -94,7 +87,6 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
         </nav>
       </div>
-    </>,
-    document.body,
+    </>
   );
 }
