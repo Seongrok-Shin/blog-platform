@@ -25,3 +25,5 @@ export interface Post {
 export interface PostListProps {
   posts: Post[];
 }
+
+export type PostParams = Promise<{ slug: string }>;

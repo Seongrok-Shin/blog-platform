@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import type { Post } from "@/types/blog";
+import type { Post, PostParams } from "@/types/blog";
 
 // Sample posts data. In a real app, you would fetch data from a CMS or database.
 const samplePosts: Post[] = [
@@ -48,13 +48,9 @@ function getPostBySlug(slug: string): Post | undefined {
   return samplePosts.find((post) => post.slug === slug);
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { slug: string } | Promise<{ slug: string }>;
-}) {
-  const resolvedParams = await params;
-  const post = getPostBySlug(resolvedParams.slug);
+export default async function BlogPostPage({ params }: { params: PostParams }) {
+  const slug = await params;
+  const post = getPostBySlug(slug.slug);
 
   if (!post) {
     notFound();
