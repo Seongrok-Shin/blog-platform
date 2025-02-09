@@ -29,6 +29,10 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     console.error("Error during sign up:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    // For development, return the actual error message. (Remove this detail in production.)
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Internal error" },
+      { status: 500 },
+    );
   }
 }
