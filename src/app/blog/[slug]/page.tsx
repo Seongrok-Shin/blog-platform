@@ -48,12 +48,13 @@ function getPostBySlug(slug: string): Post | undefined {
   return samplePosts.find((post) => post.slug === slug);
 }
 
-interface PageProps {
+export default async function BlogPostPage({
+  params,
+}: {
   params: { slug: string };
-}
-
-export default function BlogPostPage({ params }: PageProps) {
-  const post = getPostBySlug(params.slug);
+}) {
+  const resolvedParams = await Promise.resolve(params);
+  const post = getPostBySlug(resolvedParams.slug);
 
   if (!post) {
     notFound();
