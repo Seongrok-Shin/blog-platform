@@ -3,22 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { MobileMenuProps } from "@/types/navigation";
+import { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  return (
+  if (!mounted || !isOpen) return null;
+
+  return ReactDOM.createPortal(
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm sm:hidden"
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm sm:hidden z-[1000]"
         onClick={onClose}
       />
 
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg sm:hidden">
+      <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg sm:hidden z-[1001]">
         <div className="flex h-16 items-center justify-between px-4">
           <Link href="/" className="text-xl font-bold text-gray-900">
             Blog Platform
@@ -87,6 +94,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
         </nav>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }

@@ -19,7 +19,7 @@ export interface Post {
     name: string;
     image: string;
   };
-  coverImage?: string;
+  coverImage: string;
 }
 
 export interface PostListProps {
