@@ -11,6 +11,9 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+      TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

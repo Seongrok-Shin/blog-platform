@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import ClientProviders from "@/components/providers/ClientProviders";
 import "./globals.css";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/authOptions";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
