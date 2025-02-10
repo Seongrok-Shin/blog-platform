@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -15,26 +16,19 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || "Login failed");
-      } else {
-        // Redirect to home page after successful login
-        router.push("/");
-      }
-    } catch (err) {
-      setError("An unexpected error occurred");
-      console.error(err);
+    setError("");
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (result && result.error) {
+      setError(result.error);
+    } else {
+      router.push("/");
     }
     setLoading(false);
   };
