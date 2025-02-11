@@ -15,6 +15,8 @@ test.describe("Authentication UI Flow", () => {
     await page.fill('input[name="email"]', testUser.email);
     await page.fill('input[name="password"]', testUser.password);
     await page.click('button[type="submit"]');
+    await page.waitForURL("/");
+    await page.waitForLoadState("networkidle");
     await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
       timeout: 15000,
     });
