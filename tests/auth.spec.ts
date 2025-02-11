@@ -9,6 +9,7 @@ const testUser = {
 // Auth UI tests
 test.describe("Authentication UI Flow", () => {
   test("should sign in and sign out successfully", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
     // Assuming the test user already exists, proceed directly with login
     // Navigate to login page and sign in
     await page.goto("/login");
