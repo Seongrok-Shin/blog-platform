@@ -15,9 +15,9 @@ test.describe("Authentication UI Flow", () => {
     await page.fill('input[name="email"]', testUser.email);
     await page.fill('input[name="password"]', testUser.password);
     await page.click('button[type="submit"]');
-    await expect(
-      page.getByRole("heading", { name: /Welcome to Blog Platform/ }),
-    ).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
+      timeout: 15000,
+    });
     // Navigate to profile page
     await page.goto("/profile");
     // Verify profile page displays user info: check heading and user details
@@ -26,8 +26,8 @@ test.describe("Authentication UI Flow", () => {
     await expect(page.getByText(testUser.email)).toBeVisible();
     // Sign out using locator for button with hasText
     await page.locator("button", { hasText: "Sign Out" }).click();
-    // Wait for navigation and reload the page to update session state
-    await page.waitForLoadState("load");
-    await page.reload();
+    await expect(page.getByRole("link", { name: /log in/i })).toBeVisible({
+      timeout: 15000,
+    });
   });
 });

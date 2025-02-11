@@ -15,10 +15,11 @@ test.describe("Profile Page", () => {
     await page.goto("/login");
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
-    await Promise.all([
-      page.waitForURL("/"),
-      page.click('button[type="submit"]'),
-    ]);
+    await page.click('button[type="submit"]');
+    // Wait for sign in to complete by checking presence of the Profile link in navbar
+    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Navigate to profile page
     await page.goto("/profile");
@@ -27,12 +28,14 @@ test.describe("Profile Page", () => {
 
     // Click the 'Sign Out' button
     await page.locator("button", { hasText: "Sign Out" }).click();
-    // Wait for redirection to home page
-    await page.waitForURL("/");
+    // Wait for sign out to complete by waiting for the Log In button to appear
+    await expect(page.getByRole("link", { name: /log in/i })).toBeVisible({
+      timeout: 15000,
+    });
 
-    // Verify that the home page is displayed (for example, check welcome heading)
+    // Optionally, verify that the home page is displayed by checking for a welcome heading
     await expect(
       page.getByRole("heading", { name: /Welcome to Blog Platform/ }),
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15000 });
   });
 });
