@@ -1,19 +1,21 @@
 "use client";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
+  const router = useRouter();
   if (status === "loading") return <p>Loading...</p>;
   if (!session || !session.user) {
     return (
       <div className="max-w-4xl mx-auto p-8">
         <p>You are not logged in.</p>
         <button
-          onClick={() => signIn("credentials")}
+          onClick={() => router.push("/login")}
           className="px-4 py-2 bg-primary text-white rounded mt-4"
         >
-          Sign In
+          Log In
         </button>
       </div>
     );
@@ -38,7 +40,7 @@ export default function ProfilePage() {
         </div>
       </div>
       <button
-        onClick={() => signOut()}
+        onClick={() => signOut({ callbackUrl: "/" })}
         className="px-4 py-2 bg-red-500 text-white rounded"
       >
         Sign Out
