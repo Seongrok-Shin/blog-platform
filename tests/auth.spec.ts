@@ -15,12 +15,13 @@ test.describe("Authentication UI Flow", () => {
     await page.fill('input[name="email"]', testUser.email);
     await page.fill('input[name="password"]', testUser.password);
     await page.click('button[type="submit"]');
-    // Wait for navigation to home page
-    await page.waitForURL("/");
+    await expect(
+      page.getByRole("heading", { name: /Welcome to Blog Platform/ }),
+    ).toBeVisible({ timeout: 10000 });
     // Navigate to profile page
     await page.goto("/profile");
-    // Verify profile page displays user info
-    await expect(page.getByText("Profile")).toBeVisible();
+    // Verify profile page displays user info: check heading and user details
+    await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible();
     await expect(page.getByText(testUser.name)).toBeVisible();
     await expect(page.getByText(testUser.email)).toBeVisible();
     // Sign out using locator for button with hasText
