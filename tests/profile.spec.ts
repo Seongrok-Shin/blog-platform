@@ -28,6 +28,10 @@ test.describe("Profile Page", () => {
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
+    // Wait for successful sign in by checking that the 'Profile' link appears
+    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
+      timeout: 15000,
+    });
 
     // Navigate to profile page
     try {
@@ -43,8 +47,13 @@ test.describe("Profile Page", () => {
         throw error;
       }
     }
+    await page.waitForLoadState("networkidle");
+
     // Click the 'Sign Out' button
-    await page.locator("button", { hasText: "Sign Out" }).click();
+    const signOutButton = page.locator("button", { hasText: "Sign Out" });
+    await expect(signOutButton).toBeVisible({ timeout: 15000 });
+    await signOutButton.scrollIntoViewIfNeeded();
+    await signOutButton.click({ force: true });
     // Wait for sign out to complete by waiting for the Log In button to appear
     await expect(page.getByRole("link", { name: /log in/i })).toBeVisible({
       timeout: 15000,
