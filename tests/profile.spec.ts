@@ -47,6 +47,8 @@ test.describe("Profile Page", () => {
         throw error;
       }
     }
+    await page.waitForURL("/profile");
+    await page.waitForLoadState("networkidle");
     // Verify profile page is displayed by checking the heading with text 'Profile'
     await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible();
 
