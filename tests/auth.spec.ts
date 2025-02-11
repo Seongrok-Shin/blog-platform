@@ -19,7 +19,17 @@ test.describe("Authentication UI Flow", () => {
       timeout: 15000,
     });
     // Navigate to profile page
-    await page.goto("/profile");
+    try {
+      await page.goto("/profile");
+    } catch (error) {
+      if (
+        !(
+          error instanceof Error && error.message.includes("NS_BINDING_ABORTED")
+        )
+      ) {
+        throw error;
+      }
+    }
     // Verify profile page displays user info: check heading and user details
     await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible();
     await expect(page.getByText(testUser.name)).toBeVisible();

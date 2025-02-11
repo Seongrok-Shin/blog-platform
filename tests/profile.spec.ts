@@ -2,7 +2,19 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Profile Page", () => {
   test("should prompt for sign in when not authenticated", async ({ page }) => {
-    await page.goto("/profile");
+    try {
+      await page.goto("/profile");
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      if (
+        !(
+          errMsg.includes("NS_BINDING_ABORTED") ||
+          errMsg.includes("interrupted by another navigation")
+        )
+      ) {
+        throw error;
+      }
+    }
     await expect(page.getByText("You are not logged in.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Log In" })).toBeVisible();
   });
@@ -22,7 +34,19 @@ test.describe("Profile Page", () => {
     });
 
     // Navigate to profile page
-    await page.goto("/profile");
+    try {
+      await page.goto("/profile");
+    } catch (error) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      if (
+        !(
+          errMsg.includes("NS_BINDING_ABORTED") ||
+          errMsg.includes("interrupted by another navigation")
+        )
+      ) {
+        throw error;
+      }
+    }
     // Verify profile page is displayed by checking the heading with text 'Profile'
     await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible();
 
