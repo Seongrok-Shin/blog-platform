@@ -9,7 +9,7 @@ test.describe("Signup API Endpoint", () => {
     const signupData = {
       name: "Test User",
       email: uniqueEmail,
-      password: "StrongPassword123",
+      password: "StrongPassword123!",
     };
 
     // Send a POST request to the signup endpoint

@@ -2,14 +2,12 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import sql from "@/lib/db";
 import type { NextAuthOptions, DefaultSession } from "next-auth";
-
 interface AuthUser {
   id: string;
   name: string;
   email: string;
   image?: string;
 }
-
 interface ExtendedSession extends DefaultSession {
   user: {
     id: string;
@@ -18,7 +16,6 @@ interface ExtendedSession extends DefaultSession {
     image: string;
   };
 }
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -51,12 +48,12 @@ export const authOptions: NextAuthOptions = {
         if (!isValid) {
           throw new Error("Incorrect password");
         }
-        // Return user object (without password) for JWT token
+        // Return user object (with image) but we will not store the image in the token
         return {
           id: String(user.id),
           name: user.name,
           email: user.email,
-          image: user.image || "/default-profile.png",
+          image: user.image || "/profile/profile-default.svg",
         };
       },
     }),
@@ -65,27 +62,47 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
+    // JWT callback: only store id, name, and email to keep the token compact.
     async jwt({ token, user }) {
       if (user) {
         const authUser = user as AuthUser;
-        token.id = String(authUser.id);
-        token.name = authUser.name || "";
-        token.email = authUser.email;
-        token.image = authUser.image || "/default-profile.png";
+        token = {
+          id: String(authUser.id),
+          name: authUser.name || "",
+          email: authUser.email,
+        };
       }
       return token;
     },
+    // Session callback: fetch the latest image URL from the database.
     async session({ session, token }): Promise<ExtendedSession> {
-      const extendedSession: ExtendedSession = {
-        ...session,
-        user: {
-          id: token.id ? String(token.id) : "",
-          name: token.name || "",
-          email: token.email || "",
-          image: typeof token.image === "string" ? token.image : "",
-        },
+      let fetchedImage = "";
+      try {
+        const result = await sql(
+          "SELECT image FROM users WHERE email = $1 LIMIT 1",
+          [token.email],
+        );
+        if (result && result[0] && result[0].image) {
+          fetchedImage = result[0].image;
+        }
+      } catch (error) {
+        console.error("Error fetching user image from DB:", error);
+      }
+      // Use the fetchedImage only if it does not appear to be a data URI (i.e. a large string)
+      // and its length is less than 300 characters; otherwise, use the default profile image.
+      const userImage =
+        fetchedImage &&
+        !fetchedImage.startsWith("data:") &&
+        fetchedImage.length < 300
+          ? fetchedImage
+          : "/profile/profile-default.svg";
+      const user = {
+        id: token.id ? String(token.id) : "",
+        name: token.name || "",
+        email: token.email || "",
+        image: userImage,
       };
-      return extendedSession;
+      return { expires: session.expires, user };
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
