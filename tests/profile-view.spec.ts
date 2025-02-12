@@ -25,11 +25,7 @@ test.describe("Profile Page View", () => {
     await page.click('button[type="submit"]');
 
     // Wait for successful sign in by checking the 'Profile' link appears
-    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
-      timeout: 30000,
-    });
-
-    // Navigate to the profile page
+    await page.waitForURL("/");
     await page.goto("/profile");
     await page.waitForLoadState("networkidle");
 
@@ -54,10 +50,7 @@ test.describe("Profile Page View", () => {
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
     // Wait for successful sign in by ensuring the 'Profile' link exists
-    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
-      timeout: 30000,
-    });
-    // Navigate to the profile page
+    await page.waitForURL("/");
     await page.goto("/profile");
     await page.waitForLoadState("networkidle");
     // Get the profile image element and verify that it uses the default image

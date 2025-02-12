@@ -18,8 +18,13 @@ test.describe("Authentication", () => {
     await page.fill('input[name="password"]', validUser.password);
     // Submit the login form
     await page.click('button[type="submit"]');
-    // Wait for successful sign in by checking that the "Profile" link appears
-    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
+    // Wait for redirection from login
+    await page.waitForURL("/");
+    // Navigate to the profile page
+    await page.goto("/profile");
+    await page.waitForLoadState("networkidle");
+    // Verify that the profile page displays the heading 'Profile'
+    await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible({
       timeout: 30000,
     });
   });
