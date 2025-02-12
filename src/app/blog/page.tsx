@@ -4,7 +4,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 import PostList from "@/components/blog/PostList";
+import { useRouter } from "next/navigation";
 
 // Sample data - This would typically come from a database or API
 const samplePosts = [
@@ -47,6 +52,10 @@ const samplePosts = [
 ];
 
 export default function BlogPage() {
+  const { data: session } = useSession();
+  const [posts] = useState(samplePosts);
+  const router = useRouter();
+
   return (
     <div className="py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -61,8 +70,16 @@ export default function BlogPage() {
         </div>
       </div>
       <div className="mt-12">
-        <PostList posts={samplePosts} />
+        <PostList posts={posts} />
       </div>
+      {session && (
+        <button
+          onClick={() => router.push("/blog/create")}
+          className="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          +
+        </button>
+      )}
     </div>
   );
 }
