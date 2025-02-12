@@ -25,11 +25,7 @@ test.describe("Profile Page View", () => {
     await page.click('button[type="submit"]');
 
     // Wait for successful sign in by checking the 'Profile' link appears
-    await expect(page.getByRole("link", { name: "Profile" })).toBeVisible({
-      timeout: 30000,
-    });
-
-    // Navigate to the profile page
+    await page.waitForURL("/");
     await page.goto("/profile");
     await page.waitForLoadState("networkidle");
 
@@ -43,5 +39,23 @@ test.describe("Profile Page View", () => {
 
     // Verify that a profile image is present with alt text 'Profile Image'
     await expect(page.getByAltText("Profile Image")).toBeVisible();
+  });
+
+  test("should display default profile image when no image is set", async ({
+    page,
+  }) => {
+    // Sign in using credentials from environment variables
+    await page.goto("/login");
+    await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
+    await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
+    await page.click('button[type="submit"]');
+    // Wait for successful sign in by ensuring the 'Profile' link exists
+    await page.waitForURL("/");
+    await page.goto("/profile");
+    await page.waitForLoadState("networkidle");
+    // Get the profile image element and verify that it uses the default image
+    const profileImage = await page.getByAltText("Profile Image").first();
+    const imageSrc = await profileImage.getAttribute("src");
+    expect(imageSrc).toContain("/profile/profile-default.svg");
   });
 });

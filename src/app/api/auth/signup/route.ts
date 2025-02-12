@@ -12,6 +12,18 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
+    // Validate password strength
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return NextResponse.json(
+        {
+          error:
+            "Password does not meet complexity requirements. It should be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&).",
+        },
+        { status: 400 },
+      );
+    }
     // Hash the password using bcrypt with 10 salt rounds.
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
