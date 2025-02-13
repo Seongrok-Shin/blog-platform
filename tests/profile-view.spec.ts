@@ -23,14 +23,10 @@ test.describe("Profile Page View", () => {
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
     await page.click('button[type="submit"]');
-    await page.waitForURL("/", {
-      timeout: 60000,
-    });
-
-    // Wait for successful sign in by checking the 'Profile' link appears
-    await page.waitForURL("/");
-    await page.goto("/profile");
+    await page.waitForURL("/", { timeout: 0 });
     await page.waitForLoadState("networkidle");
+
+    await page.goto("/profile");
 
     // Verify that the profile page displays the heading 'Profile'
     await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible({

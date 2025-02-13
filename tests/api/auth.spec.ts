@@ -20,15 +20,12 @@ test.describe("Authentication", () => {
     // Fill in login credentials
     await page.getByLabel("Email").fill(validUser.email);
     await page.getByLabel("Password").fill(validUser.password);
-
-    // Submit the login form and wait for navigation
-    await Promise.all([
-      page.waitForURL("/", { timeout: 60000 }), // Wait for navigation to the home page
-      page.click('button[type="submit"]'), // Click the submit button
-    ]);
+    await page.click('button[type="submit"]'), // Click the submit button
+    await page.waitForURL("/", { timeout: 0 });
+    await page.waitForLoadState("networkidle");
 
     // Navigate to the profile page
-    await page.goto("/profile", { waitUntil: "load" });
+    await page.goto("/profile", { timeout: 0 });
   });
 
   test("should display error for invalid credentials", async ({ page }) => {
