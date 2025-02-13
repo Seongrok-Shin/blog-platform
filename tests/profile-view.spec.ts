@@ -1,60 +1,47 @@
+// profile-view.spec.ts
 import { test, expect } from "@playwright/test";
-
-// This test suite covers the profile page view for both authenticated and non-authenticated users.
 
 test.describe("Profile Page View", () => {
   test.beforeEach(async ({ page }) => {
-    // Set viewport to a desktop resolution
     await page.setViewportSize({ width: 1280, height: 720 });
   });
 
   test("should prompt for login when not authenticated", async ({ page }) => {
-    await page.goto("/profile");
-    // Verify that the page prompts for login
+    await page.goto("/profile", { waitUntil: "networkidle" });
     await expect(page.getByText("You are not logged in.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Log In" })).toBeVisible();
   });
 
-  test("should display profile information when authenticated", async ({
-    page,
-  }) => {
-    // Sign in using credentials from environment variables
-    await page.goto("/login");
+  test("should display profile information when authenticated", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "networkidle" });
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
-    await page.click('button[type="submit"]');
-    await page.waitForURL("/", { timeout: 0 });
-    await page.waitForLoadState("networkidle");
+    
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: "networkidle" }),
+      page.click('button[type="submit"]')
+    ]);
 
-    await page.goto("/profile");
+    await page.goto("/profile", { waitUntil: "networkidle" });
 
-    // Verify that the profile page displays the heading 'Profile'
-    await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible({
-      timeout: 30000,
-    });
-
-    // Verify that the user's email is displayed (assuming the email is shown on profile)
+    await expect(page.getByRole("heading", { name: "Profile" })).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(process.env.TEST_USER_EMAIL!)).toBeVisible();
   });
 
-  test("should display default profile image when no image is set", async ({
-    page,
-  }) => {
-    // Sign in using credentials from environment variables
-    await page.goto("/login");
+  test("should display default profile image when no image is set", async ({ page }) => {
+    await page.goto("/login", { waitUntil: "networkidle" });
     await page.fill('input[name="email"]', process.env.TEST_USER_EMAIL!);
     await page.fill('input[name="password"]', process.env.TEST_USER_PASSWORD!);
-    await page.click('button[type="submit"]');
-    await page.waitForURL("/", {
-      timeout: 60000,
-    });
+    
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: "networkidle" }),
+      page.click('button[type="submit"]')
+    ]);
 
-    // Wait for successful sign in by ensuring the 'Profile' link exists
-    await page.waitForURL("/");
-    await page.goto("/profile");
-    await page.waitForLoadState("networkidle");
-    // Get the profile image element and verify that it uses the default image
+    await page.goto("/profile", { waitUntil: "networkidle" });
+
     const profileImage = page.getByAltText("Profile Image").first();
+    await expect(profileImage).toBeVisible();
     const imageSrc = await profileImage.getAttribute("src");
     expect(imageSrc).toContain("/profile/profile-default.svg");
   });
