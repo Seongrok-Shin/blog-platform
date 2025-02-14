@@ -3,7 +3,10 @@ import sql from "@/lib/db";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  {
+    params,
+    searchParams: _searchParams, // eslint-disable-line @typescript-eslint/no-unused-vars
+  }: { params: { id: string }; searchParams: URLSearchParams },
 ) {
   try {
     const { id } = params;
