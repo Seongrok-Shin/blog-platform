@@ -39,6 +39,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-md w-full max-w-2xl p-6">
         <div className="flex flex-col items-center justify-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Profile</h1>
           <div className="w-32 h-32 relative mb-4">
             <Image
               src={
@@ -55,7 +56,6 @@ export default function ProfilePage() {
             />
           </div>
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Profile</h1>
             <p className="text-xl font-semibold text-gray-700">
               {user?.name || "No Name"}
             </p>
