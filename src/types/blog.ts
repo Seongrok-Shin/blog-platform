@@ -6,6 +6,7 @@ export interface PostCardProps {
   createdAt: string;
   author: {
     name: string;
+    email?: string;
     profileImageUrl: string;
   };
   coverImageUrl?: string;

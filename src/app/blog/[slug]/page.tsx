@@ -44,7 +44,7 @@ async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
