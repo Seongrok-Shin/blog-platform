@@ -13,7 +13,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Verify the user is the author of the post
     const [post] = await sql("SELECT author_id FROM posts WHERE id = $1", [id]);
