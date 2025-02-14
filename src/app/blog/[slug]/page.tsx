@@ -1,74 +1,80 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import type { Post, PostParams } from "@/types/blog";
+import sql from "@/lib/db";
+import type { PostCardProps } from "@/types/blog";
+import DeleteButton from "@/components/blog/DeleteButton";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/authOptions";
 
-// Sample posts data. In a real app, you would fetch data from a CMS or database.
-const samplePosts: Post[] = [
-  {
-    title: "Getting Started with Next.js",
-    excerpt:
-      "Learn how to build modern web applications with Next.js, React, and TypeScript.",
-    slug: "getting-started-with-nextjs",
-    date: "2025-01-01",
-    author: {
-      name: "Seongrok Shin",
-      image: "https://github.com/Seongrok-Shin.png",
-    },
-    coverImage: "https://via.placeholder.com/800x400",
-  },
-  {
-    title: "Building a Blog Platform",
-    excerpt:
-      "A comprehensive guide to creating a full-featured blog platform using modern web technologies.",
-    slug: "building-a-blog-platform",
-    date: "2025-01-02",
-    author: {
-      name: "Seongrok Shin",
-      image: "https://github.com/Seongrok-Shin.png",
-    },
-    coverImage: "https://via.placeholder.com/800x400",
-  },
-  {
-    title: "Styling with Tailwind CSS",
-    excerpt:
-      "Learn how to create beautiful, responsive designs using Tailwind CSS utility classes.",
-    slug: "styling-with-tailwind-css",
-    date: "2025-01-03",
-    author: {
-      name: "Seongrok Shin",
-      image: "https://github.com/Seongrok-Shin.png",
-    },
-    coverImage: "https://via.placeholder.com/800x400",
-  },
-];
+async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
+  try {
+    const query = `
+      SELECT p.*, u.name as author_name, u.email as author_email, u.image as author_image
+      FROM posts p
+      JOIN users u ON p.author_id = u.id
+      WHERE p.slug = $1
+    `;
+    const result = await sql(query, [slug]);
 
-// Helper function to get a post by slug
-function getPostBySlug(slug: string): Post | undefined {
-  return samplePosts.find((post) => post.slug === slug);
+    if (result.length === 0) {
+      return null;
+    }
+
+    const post = result[0];
+    return {
+      id: post.id,
+      title: post.title,
+      excerpt: post.excerpt,
+      slug: post.slug,
+      createdAt: post.created_at.toISOString(),
+      coverImageUrl: post.cover_image_url,
+      author: {
+        name: post.author_name,
+        email: post.author_email,
+        profileImageUrl: post.author_image || "/profile/profile-default.svg",
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    return null;
+  }
 }
 
-export default async function BlogPostPage({ params }: { params: PostParams }) {
-  const slug = await params;
-  const post = getPostBySlug(slug.slug);
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  const session = await getServerSession(authOptions);
 
   if (!post) {
     notFound();
   }
 
+  const isAuthor = session?.user?.email === post.author.email;
+
   return (
     <article className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-4xl font-bold text-gray-900">{post.title}</h1>
-      <div className="mt-4 text-gray-600">
-        <time dateTime={new Date(post.date).toISOString()}>{post.date}</time>
+      <div className="flex justify-between items-start">
+        <h1 className="text-4xl font-bold text-gray-900">{post.title}</h1>
+        {isAuthor && <DeleteButton postId={post.id} />}
       </div>
-      {post.coverImage && (
+      <div className="mt-4 text-gray-600">
+        <time dateTime={new Date(post.createdAt).toISOString()}>
+          {new Date(post.createdAt).toLocaleDateString()}
+        </time>
+      </div>
+      {post.coverImageUrl && (
         <div className="relative mt-6 h-64 w-full z-0">
           <Image
-            src={post.coverImage}
+            src={post.coverImageUrl}
             alt={post.title}
             fill
             className="object-cover"
+            priority
           />
         </div>
       )}
@@ -76,10 +82,11 @@ export default async function BlogPostPage({ params }: { params: PostParams }) {
       <div className="mt-8 flex items-center gap-4">
         <div className="relative h-10 w-10">
           <Image
-            src={post.author.image}
+            src={post.author.profileImageUrl}
             alt={post.author.name}
             fill
             className="rounded-full"
+            sizes="40px"
           />
         </div>
         <span className="text-sm font-medium">{post.author.name}</span>

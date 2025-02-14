@@ -1,13 +1,14 @@
 export interface PostCardProps {
+  id: number;
   title: string;
   excerpt: string;
   slug: string;
-  date: string;
+  createdAt: string;
   author: {
     name: string;
-    image: string;
+    profileImageUrl: string;
   };
-  coverImage?: string;
+  coverImageUrl?: string;
 }
 
 export interface Post {
@@ -23,7 +24,7 @@ export interface Post {
 }
 
 export interface PostListProps {
-  posts: Post[];
+  posts: PostCardProps[];
 }
 
 export type PostParams = Promise<{ slug: string }>;
