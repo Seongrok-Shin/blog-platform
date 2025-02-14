@@ -9,7 +9,7 @@ export async function GET(
   }: { params: { id: string }; searchParams: URLSearchParams },
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const [result] = await sql(
       "SELECT image_data, image_mimetype FROM cover_images WHERE id = $1",
