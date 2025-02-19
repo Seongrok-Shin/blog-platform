@@ -20,7 +20,7 @@ async function getSearchResults(
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: { query: string; filter?: string };
+  searchParams: Promise<{ query: string; filter?: string }>;
 }) {
   // Ensure searchParams is awaited
   const { query, filter = "all" } = await searchParams;
