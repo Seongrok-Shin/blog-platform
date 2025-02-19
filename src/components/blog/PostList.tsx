@@ -5,25 +5,18 @@
  */
 
 import PostCard from "./PostCard";
-import type { PostListProps } from "@/types/blog";
+import type { PostCardProps } from "@/types/blog";
 
-export default function PostList({ posts }: PostListProps) {
+export default function PostList({ posts }: { posts: PostCardProps[] }) {
+  if (!posts || posts.length === 0) {
+    return <div>No posts found.</div>; // Fallback UI
+  }
+
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <PostCard
-            key={post.slug}
-            id={post.id}
-            title={post.title}
-            excerpt={post.excerpt}
-            slug={post.slug}
-            createdAt={post.createdAt}
-            author={post.author}
-            coverImageUrl={post.coverImageUrl}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
     </div>
   );
 }

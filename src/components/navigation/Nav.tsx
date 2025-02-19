@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import MobileMenuButton from "./MobileMenuButton";
+import { useState } from "react";
 import NavLink from "./NavLink";
 import { useSession, signOut } from "next-auth/react";
+import MobileMenu from "./MobileMenu";
 
 const navigationItems = [
   { href: "/", label: "Home" },
@@ -14,6 +15,11 @@ const navigationItems = [
 
 export default function Nav() {
   const { data: session } = useSession();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const onOpenMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <nav className="border-b border-gray-200 bg-white">
@@ -72,7 +78,31 @@ export default function Nav() {
           </div>
 
           {/* Mobile menu button */}
-          <MobileMenuButton />
+          <button
+            aria-label="Open main menu"
+            onClick={onOpenMobileMenu}
+            className="sm:hidden p-2 text-gray-500 hover:text-gray-700"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+
+          {/* Mobile menu dropdown */}
+          <MobileMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          />
         </div>
       </div>
     </nav>

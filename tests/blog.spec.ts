@@ -36,24 +36,20 @@ test.describe("Blog Page", () => {
       const newPost = await response.json();
       postId = newPost.id;
     } catch (error) {
-      console.error("Error in beforeAll:", error);
+      console.warn("Error in beforeAll:", error);
       postId = null; // Ensure postId is null if creation fails
     }
   });
 
   test.afterAll(async () => {
     if (postId) {
-      try {
-        // Clean up the test post after running the tests
-        const response = await fetch(`${baseUrl}/api/posts/${postId}`, {
-          method: "DELETE",
-        });
+      // Clean up the test post after running the tests
+      const response = await fetch(`${baseUrl}/api/posts/${postId}`, {
+        method: "DELETE",
+      });
 
-        if (!response.ok) {
-          throw new Error(`Failed to delete post: ${response.statusText}`);
-        }
-      } catch (error) {
-        console.error("Error in afterAll:", error);
+      if (!response.ok) {
+        throw new Error(`Failed to delete post: ${response.statusText}`);
       }
     }
   });
@@ -62,9 +58,6 @@ test.describe("Blog Page", () => {
     // Navigate to the blog page before each test
     await page.goto("/blog");
     await page.waitForLoadState("networkidle");
-
-    // Debug: Log the page content
-    console.log(await page.content());
   });
 
   test("should navigate to individual blog post", async ({ page }) => {
@@ -80,8 +73,6 @@ test.describe("Blog Page", () => {
       await expect(
         page.getByRole("link", { name: "Back to Blog" }),
       ).toBeVisible();
-    } else {
-      console.warn("Skipping post navigation: Test post not created");
     }
   });
 
@@ -95,8 +86,6 @@ test.describe("Blog Page", () => {
       // Verify author name and profile image are visible
       await expect(page.getByText("John Doe")).toBeVisible();
       await expect(page.getByAltText("John Doe")).toBeVisible();
-    } else {
-      console.warn("Skipping author verification: Test post not created");
     }
   });
 
@@ -114,8 +103,6 @@ test.describe("Blog Page", () => {
       expect(post).toBeDefined();
       expect(post.title).toBe(testPost.title);
       expect(post.excerpt).toBe(testPost.excerpt);
-    } else {
-      console.warn("Skipping post fetch: Test post not created");
     }
   });
 
@@ -142,8 +129,6 @@ test.describe("Blog Page", () => {
       } else {
         throw new Error("Post still exists after deletion");
       }
-    } else {
-      console.warn("Skipping post deletion: Test post not created");
     }
   });
 });

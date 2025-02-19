@@ -1,12 +1,13 @@
 export interface PostCardProps {
   id: number;
   title: string;
+  content: string;
   excerpt: string;
   slug: string;
   createdAt: string;
   author: {
+    email: string | null | undefined;
     name: string;
-    email?: string;
     profileImageUrl: string;
   };
   coverImageUrl?: string;
@@ -14,7 +15,7 @@ export interface PostCardProps {
 
 export interface Post {
   title: string;
-  excerpt: string;
+  content: string;
   slug: string;
   date: string;
   author: {
