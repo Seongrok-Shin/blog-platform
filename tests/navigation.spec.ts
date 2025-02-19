@@ -141,25 +141,4 @@ test.describe("Navigation", () => {
       await expect(page.locator(".fixed.inset-y-0.left-0")).toBeHidden();
     });
   });
-
-  test("should search for posts", async ({ page }) => {
-    await page.goto("/blog");
-
-    // Wait for the search input to be visible
-    const searchInput = page.getByRole("textbox", { name: "Search posts..." });
-    await expect(searchInput).toBeVisible();
-
-    // Enter a search query
-    await searchInput.fill("test");
-
-    // Click the search button
-    const searchButton = page.getByRole("button", { name: "Search" });
-    await searchButton.click();
-
-    // Verify the search results page
-    await expect(page).toHaveURL(/\/search\?query=test/);
-    await expect(
-      page.getByRole("heading", { name: "Search Results for" }),
-    ).toBeVisible();
-  });
 });

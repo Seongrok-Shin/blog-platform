@@ -1,5 +1,6 @@
 import { PostCardProps } from "@/types/blog";
 import PostList from "@/components/blog/PostList";
+import BottomSearchBar from "@/components/blog/BottomSearchBar";
 
 async function getSearchResults(
   query: string,
@@ -14,7 +15,12 @@ async function getSearchResults(
     throw new Error("Failed to fetch search results");
   }
 
-  return response.json();
+  const posts = await response.json();
+  // Convert dates to locale string
+  return posts.map((post: PostCardProps) => ({
+    ...post,
+    createdAt: new Date(post.created_at).toLocaleDateString(),
+  }));
 }
 
 export default async function SearchPage({
@@ -30,12 +36,12 @@ export default async function SearchPage({
       <div className="max-w-4xl mx-auto py-12 px-4">
         <h1 className="text-3xl font-bold mb-8">Search</h1>
         <p>Please enter a search query.</p>
+        <BottomSearchBar />
       </div>
     );
   }
 
   const posts = await getSearchResults(query, filter);
-
   return (
     <div className="max-w-4xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-8">Search Results for `{query}`</h1>
@@ -44,6 +50,9 @@ export default async function SearchPage({
       ) : (
         <p>No posts found matching your search.</p>
       )}
+      <div className="mt-8">
+        <BottomSearchBar />
+      </div>
     </div>
   );
 }
