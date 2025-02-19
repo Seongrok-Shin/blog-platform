@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import type { MobileMenuProps } from "@/types/navigation";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   if (!isOpen) return null;
 
@@ -69,20 +71,40 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
           <div className="mt-8 border-t border-gray-200 pt-4">
             <div className="space-y-1">
-              <Link
-                href="/login"
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/register"
-                onClick={onClose}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium bg-primary text-white hover:bg-primary/90"
-              >
-                Sign up
-              </Link>
+              {session?.user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    onClick={onClose}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => signOut()}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 w-full text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={onClose}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={onClose}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium bg-primary text-white hover:bg-primary/90"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </nav>
