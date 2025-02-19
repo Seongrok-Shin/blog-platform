@@ -1,6 +1,6 @@
 export interface PostCardProps {
-  created_at: string | number | Date;
-  date: string | number | Date;
+  created_at?: string | number | Date;
+  date?: string | number | Date;
   id: number;
   title: string;
   content: string;
