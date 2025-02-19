@@ -19,7 +19,9 @@ async function getSearchResults(
   // Convert dates to locale string
   return posts.map((post: PostCardProps) => ({
     ...post,
-    createdAt: new Date(post.created_at).toLocaleDateString(),
+    createdAt: post.created_at
+      ? new Date(post.created_at).toLocaleDateString()
+      : "",
   }));
 }
 
