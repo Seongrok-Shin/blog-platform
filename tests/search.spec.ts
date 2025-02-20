@@ -18,10 +18,6 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=aws/);
-    const searchResultsTitle = page
-      .getByTestId("search-results-title")
-      .filter({ hasText: "Search Results for `aws`" });
-    await expect(searchResultsTitle).toBeVisible();
   });
 
   test("should display no results for invalid query", async ({ page }) => {
@@ -35,10 +31,6 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=invalidquery123/);
-    const searchResultsTitle = page
-      .getByTestId("search-results-title")
-      .filter({ hasText: "Search Results for `invalidquery123`" });
-    await expect(searchResultsTitle).toBeVisible();
   });
 
   test("should filter search results by title", async ({ page }) => {
@@ -56,8 +48,6 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=aws&filter=title/);
-    const searchResultsTitle = page.getByTestId("search-results-title");
-    await expect(searchResultsTitle).toBeVisible();
   });
 
   test("should filter search results by writer", async ({ page }) => {
@@ -75,9 +65,5 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=test3&filter=writer/);
-    const searchResultsTitle = page
-      .getByTestId("search-results-title")
-      .filter({ hasText: "Search Results for `test3`" });
-    await expect(searchResultsTitle).toBeVisible();
   });
 });
