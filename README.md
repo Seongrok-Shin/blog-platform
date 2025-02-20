@@ -9,20 +9,19 @@ A modern, full-stack blog platform built with Next.js 14, TypeScript, and Tailwi
 - 🔒 Authentication and user management (coming soon)
 - 📱 Mobile-friendly interface
 - 🚀 Server-side rendering for optimal performance
+- 💾 Database integration
 - 🔍 SEO optimized (coming soon)
-- 💾 Database integration (coming soon)
-- 📊 Analytics dashboard (coming soon)
 
 ## Tech Stack
 
-- **Framework:** Next.js 14 with App Router
+- **Framework:** Next.js 15 with App Router
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **Linting:** ESLint
 - **Code Formatting:** Prettier
 - **Testing:** Playwright (E2E)
-- **Authentication:** (TBD)
-- **Database:** (TBD)
+- **Authentication:** Next-auth
+- **Database:** Neon (serverless)
 
 ## Getting Started
 
