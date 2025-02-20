@@ -9,26 +9,36 @@
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import PostList from "@/components/blog/PostList";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { PostCardProps } from "@/types/blog";
-import BottomSearchBar from "@/components/blog/BottomSearchBar";
+import BottomSearchBar from "@/components/BottomSearchBar";
+import Pagination from "@/components/Pagination";
 
 export default function BlogPage() {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<PostCardProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalPosts: 0,
+  });
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1");
+  const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch("/api/posts");
+        const limit = isMobile ? 3 : 6;
+        const response = await fetch(`/api/posts?page=${page}&limit=${limit}`);
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
         }
         const data = await response.json();
-        console.log(data);
-        setPosts(data);
+        setPosts(data.posts);
+        setPagination(data.pagination);
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
@@ -37,7 +47,7 @@ export default function BlogPage() {
     };
 
     fetchPosts();
-  }, []);
+  }, [page, isMobile]);
 
   if (isLoading) {
     return <div className="text-center py-8">Loading posts...</div>;
@@ -60,7 +70,13 @@ export default function BlogPage() {
           +
         </button>
       )}
-      <BottomSearchBar />
+      <div className={`flex ${isMobile ? "flex-col" : "justify-between"}`}>
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+        />
+        <BottomSearchBar />
+      </div>
     </div>
   );
 }

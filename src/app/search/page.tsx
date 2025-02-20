@@ -1,6 +1,6 @@
 import { PostCardProps } from "@/types/blog";
 import PostList from "@/components/blog/PostList";
-import BottomSearchBar from "@/components/blog/BottomSearchBar";
+import BottomSearchBar from "@/components/BottomSearchBar";
 
 async function getSearchResults(
   query: string,
