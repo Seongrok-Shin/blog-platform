@@ -25,7 +25,7 @@ jobs:
       - name: Check Playwright Version
         run: npx playwright --version
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: yarn playwright install --with-deps
       - name: List Playwright Tests
         run: npx playwright test --list
       - name: Debug Environment Variables
