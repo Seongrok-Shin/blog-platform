@@ -1,3 +1,5 @@
+import BottomSearchBar from "@/components/blog/BottomSearchBar";
+
 export default function Home() {
   return (
     <main className="min-h-screen p-8">
@@ -15,6 +17,7 @@ export default function Home() {
             </p>
           </div>
         </div>
+        <BottomSearchBar />
       </div>
     </main>
   );

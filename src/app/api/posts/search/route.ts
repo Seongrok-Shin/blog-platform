@@ -7,7 +7,8 @@ export async function GET(request: Request) {
     const query = searchParams.get("query");
     const filter = searchParams.get("filter") || "all";
 
-    if (!query) {
+    // Validate query
+    if (!query || typeof query !== "string") {
       return NextResponse.json(
         { error: "Search query is required" },
         { status: 400 },

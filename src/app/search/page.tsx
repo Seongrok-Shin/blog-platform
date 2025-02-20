@@ -12,11 +12,11 @@ async function getSearchResults(
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch search results");
+    const error = await response.json();
+    throw new Error(error.error || "Failed to fetch search results");
   }
 
   const posts = await response.json();
-  // Convert dates to locale string
   return posts.map((post: PostCardProps) => ({
     ...post,
     createdAt: post.created_at
@@ -28,10 +28,9 @@ async function getSearchResults(
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ query: string; filter?: string }>;
+  searchParams: { query: string; filter?: string };
 }) {
-  // Ensure searchParams is awaited
-  const { query, filter = "all" } = await searchParams;
+  const { query, filter = "all" } = searchParams;
 
   if (!query) {
     return (
@@ -43,23 +42,36 @@ export default async function SearchPage({
     );
   }
 
-  const posts = await getSearchResults(query, filter);
-  return (
-    <div className="max-w-4xl mx-auto py-12 px-4">
-      <h1
-        data-testid="search-results-title"
-        className="text-3xl font-bold mb-8"
-      >
-        Search Results for `{query}`
-      </h1>
-      {posts.length > 0 ? (
-        <PostList posts={posts} />
-      ) : (
-        <p>No posts found matching your search.</p>
-      )}
-      <div className="mt-8">
-        <BottomSearchBar />
+  try {
+    const posts = await getSearchResults(query, filter);
+    return (
+      <div className="max-w-4xl mx-auto py-12 px-4">
+        <h1
+          data-testid="search-results-title"
+          className="text-3xl font-bold mb-8"
+        >
+          Search Results for `{query}`
+        </h1>
+        {posts.length > 0 ? (
+          <PostList posts={posts} />
+        ) : (
+          <p>No posts found matching your search.</p>
+        )}
+        <div className="mt-8">
+          <BottomSearchBar />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    return (
+      <div className="max-w-4xl mx-auto py-12 px-4">
+        <h1 className="text-3xl font-bold mb-8">Search Error</h1>
+        <p className="text-red-500">
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred"}
+        </p>
+      </div>
+    );
+  }
 }

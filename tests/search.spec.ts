@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Search Functionality", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/blog");
+    await page.goto("/");
     await page.waitForSelector('[placeholder="Search posts..."]'); // Wait for search bar to load
   });
 
