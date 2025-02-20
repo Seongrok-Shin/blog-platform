@@ -1,4 +1,4 @@
-import BottomSearchBar from "@/components/blog/BottomSearchBar";
+import BottomSearchBar from "@/components/BottomSearchBar";
 
 export default function Home() {
   return (

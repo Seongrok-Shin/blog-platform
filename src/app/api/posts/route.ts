@@ -87,30 +87,50 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "6");
+
+    const offset = (page - 1) * limit;
+
     const query = `
       SELECT p.*, u.name as author_name, u.image as author_image
       FROM posts p
       JOIN users u ON p.author_id = u.id
       ORDER BY p.created_at DESC
+      LIMIT $1 OFFSET $2
     `;
 
-    const result = await sql(query);
+    const result = await sql(query, [limit, offset]);
+
+    // Get total count for pagination
+    const countQuery = `SELECT COUNT(*) FROM posts`;
+    const [countResult] = await sql(countQuery);
+    const totalPosts = parseInt(countResult.count);
 
     return NextResponse.json(
-      (result || []).map((post) => ({
-        id: post.id,
-        title: post.title,
-        excerpt: post.excerpt,
-        slug: post.slug,
-        createdAt: post.created_at.toISOString(),
-        coverImageUrl: post.cover_image_url,
-        author: {
-          name: post.author_name || "Unknown Author",
-          profileImageUrl: post.author_image || "/profile/profile-default.svg",
+      {
+        posts: (result || []).map((post) => ({
+          id: post.id,
+          title: post.title,
+          excerpt: post.excerpt,
+          slug: post.slug,
+          createdAt: post.created_at.toISOString(),
+          coverImageUrl: post.cover_image_url,
+          author: {
+            name: post.author_name || "Unknown Author",
+            profileImageUrl:
+              post.author_image || "/profile/profile-default.svg",
+          },
+        })),
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(totalPosts / limit),
+          totalPosts,
         },
-      })),
+      },
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
