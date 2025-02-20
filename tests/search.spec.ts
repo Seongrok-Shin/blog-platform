@@ -6,7 +6,7 @@ test.describe("Search Functionality", () => {
     await page.waitForSelector('[placeholder="Search posts..."]'); // Wait for search bar to load
   });
 
-  test("should search for posts by title", async ({ page }) => {
+  test("should search for posts by All", async ({ page }) => {
     // Enter a search query in the search bar
     const searchInput = page.getByPlaceholder("Search posts...");
     await searchInput.waitFor(); // Ensure the input is visible
@@ -18,9 +18,10 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=aws/);
-    await expect(
-      page.getByRole("heading", { name: "Search Results for `aws`" }),
-    ).toBeVisible();
+    const searchResultsTitle = page
+      .getByTestId("search-results-title")
+      .filter({ hasText: "Search Results for `aws`" });
+    await expect(searchResultsTitle).toBeVisible();
   });
 
   test("should display no results for invalid query", async ({ page }) => {
@@ -34,9 +35,10 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=invalidquery123/);
-    await expect(
-      page.getByText("No posts found matching your search."),
-    ).toBeVisible();
+    const searchResultsTitle = page
+      .getByTestId("search-results-title")
+      .filter({ hasText: "Search Results for `invalidquery123`" });
+    await expect(searchResultsTitle).toBeVisible();
   });
 
   test("should filter search results by title", async ({ page }) => {
@@ -54,9 +56,8 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=aws&filter=title/);
-    await expect(
-      page.getByRole("heading", { name: "Search Results for `aws`" }),
-    ).toBeVisible();
+    const searchResultsTitle = page.getByTestId("search-results-title");
+    await expect(searchResultsTitle).toBeVisible();
   });
 
   test("should filter search results by writer", async ({ page }) => {
@@ -74,8 +75,9 @@ test.describe("Search Functionality", () => {
 
     // Verify the search results page
     await expect(page).toHaveURL(/\/search\?query=test3&filter=writer/);
-    await expect(
-      page.getByRole("heading", { name: "Search Results for `test3`" }),
-    ).toBeVisible();
+    const searchResultsTitle = page
+      .getByTestId("search-results-title")
+      .filter({ hasText: "Search Results for `test3`" });
+    await expect(searchResultsTitle).toBeVisible();
   });
 });

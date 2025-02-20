@@ -46,7 +46,12 @@ export default async function SearchPage({
   const posts = await getSearchResults(query, filter);
   return (
     <div className="max-w-4xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-8">Search Results for `{query}`</h1>
+      <h1
+        data-testid="search-results-title"
+        className="text-3xl font-bold mb-8"
+      >
+        Search Results for `{query}`
+      </h1>
       {posts.length > 0 ? (
         <PostList posts={posts} />
       ) : (
