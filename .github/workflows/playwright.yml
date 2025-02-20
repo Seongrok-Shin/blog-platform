@@ -24,10 +24,21 @@ jobs:
           node-version: lts/*
 
       - name: Install dependencies
-        run: npm install -g yarn && yarn install --frozen-lockfile
+        run: npm install -g yarn && yarn install --frozen-lockfile 
 
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
+
+      - name: Kill existing process on port 3000 (if any)
+        run: kill -9 $(lsof -ti:3000) 2>/dev/null || true
+
+      - name: Start Next.js
+        run: npm run build && npm run start &
+        env:
+          PORT: 3000
+
+      - name: Wait for Next.js to be ready
+        run: timeout 30s bash -c 'until curl -sSf http://localhost:3000 >/dev/null; do sleep 2; done'
 
       - name: Run Playwright tests with tracing
         run: npx playwright test --trace on
