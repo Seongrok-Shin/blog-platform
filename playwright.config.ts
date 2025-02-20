@@ -30,6 +30,11 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   timeout: 60000,
+  webServer: {
+    command: "npm run dev",
+    url: process.env.BASE_URL || "http://localhost:3000",
+    reuseExistingServer: !process.env.CI || true,
+  },
   use: {
     navigationTimeout: 60000,
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -76,11 +81,4 @@ export default defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: "npm run dev",
-    url: process.env.BASE_URL || "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-  },
 });

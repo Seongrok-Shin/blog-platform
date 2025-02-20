@@ -18,24 +18,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install dependencies
         run: npm install -g yarn && yarn install --frozen-lockfile
+
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
-      - name: List Playwright Tests
-        run: npx playwright test --list
-      - name: Start Next.js
-        run: npm run build && npm run start &
-        env:
-          PORT: 3000
-      - name: Wait for Next.js to be ready
-        run: |
-          timeout 30s bash -c 'until curl -sSf http://localhost:3000 >/dev/null; do sleep 2; done'
+
       - name: Run Playwright tests with tracing
         run: npx playwright test --trace on
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
