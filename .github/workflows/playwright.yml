@@ -25,13 +25,6 @@ jobs:
         run: npm install -g yarn && yarn install --frozen-lockfile
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
-      - name: Debug Neon Database URL (Partial)
-        run: |
-          echo "Neon DB Host: $(echo ${{ secrets.DATABASE_URL }} | sed -E 's/(.*@)//')"
-      - name: Apply Database Migrations
-        run: psql ${{ secrets.DATABASE_URL }} -f migrations.sql
-      - name: Seed Database
-        run: psql ${{ secrets.DATABASE_URL }} -f seed.sql
       - name: List Playwright Tests
         run: npx playwright test --list
       - name: Start Next.js
