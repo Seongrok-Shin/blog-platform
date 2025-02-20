@@ -25,6 +25,7 @@ async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
     return {
       id: post.id,
       title: post.title,
+      content: post.content,
       excerpt: post.excerpt,
       slug: post.slug,
       createdAt: post.created_at.toISOString(),
@@ -78,7 +79,7 @@ export default async function BlogPostPage({
           />
         </div>
       )}
-      <p className="mt-6 text-lg text-gray-700">{post.excerpt}</p>
+      <p className="mt-6 text-lg text-gray-700">{post.content}</p>
       <div className="mt-8 flex items-center gap-4">
         <div className="relative h-10 w-10">
           <Image

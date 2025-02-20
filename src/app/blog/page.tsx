@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import PostList from "@/components/blog/PostList";
 import { useRouter } from "next/navigation";
 import type { PostCardProps } from "@/types/blog";
+import BottomSearchBar from "@/components/blog/BottomSearchBar";
 
 export default function BlogPage() {
   const { data: session } = useSession();
@@ -26,6 +27,7 @@ export default function BlogPage() {
           throw new Error("Failed to fetch posts");
         }
         const data = await response.json();
+        console.log(data);
         setPosts(data);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -42,25 +44,14 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="py-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-            Latest Posts
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-            Discover the latest insights, tutorials, and thoughts on web
-            development, design, and technology.
-          </p>
-        </div>
+    <div className="py-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold mb-4">Blog</h1>
+        <p className="text-gray-600 mb-8">
+          Explore our latest posts and insights.
+        </p>
       </div>
-      <div className="mt-12">
-        {posts.length > 0 ? (
-          <PostList posts={posts} />
-        ) : (
-          <div className="text-center text-gray-500">No posts available</div>
-        )}
-      </div>
+      <PostList posts={posts} />
       {session && (
         <button
           onClick={() => router.push("/blog/create")}
@@ -69,6 +60,7 @@ export default function BlogPage() {
           +
         </button>
       )}
+      <BottomSearchBar />
     </div>
   );
 }

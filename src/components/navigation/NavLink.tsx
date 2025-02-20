@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NavLinkProps } from "@/types/navigation";
 
-export default function NavLink({ href, children }: NavLinkProps) {
+export default function NavLink({ href, children, className }: NavLinkProps) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
@@ -15,7 +15,7 @@ export default function NavLink({ href, children }: NavLinkProps) {
         isActive
           ? "border-primary text-gray-900"
           : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-      }`}
+      } ${className}`}
     >
       {children}
     </Link>

@@ -12,5 +12,6 @@ export interface MobileMenuProps {
 
 export interface NavLinkProps {
   href: string;
-  children: ReactNode;
+  children: React.ReactNode;
+  className?: string;
 }
