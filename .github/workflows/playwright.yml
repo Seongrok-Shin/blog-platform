@@ -22,12 +22,10 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm install -g yarn && yarn install --frozen-lockfile 
-      - name: Check Playwright Version
-        run: yarn playwright --version
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
       - name: List Playwright Tests
-        run: yarn playwright test --list
+        run: npx playwright test --list
       - name: Debug Environment Variables
         run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
           echo "DATABASE_URL_UNPOOLED=${{ secrets.DATABASE_URL_UNPOOLED }}"
@@ -35,7 +33,7 @@ jobs:
           echo "TEST_USER_PASSWORD=${{ secrets.TEST_USER_PASSWORD }}"
           echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"
       - name: Run Playwright tests
-        run: yarn playwright test
+        run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
