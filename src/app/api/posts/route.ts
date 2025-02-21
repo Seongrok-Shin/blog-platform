@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, excerpt, content, coverImage } = body;
+    const { title, excerpt, content, coverImage, categoryId, tagIds } = body;
     if (!title || !excerpt) {
       return NextResponse.json(
         { error: "Missing title or excerpt" },
@@ -60,11 +60,20 @@ export async function POST(request: Request) {
     }
 
     const query = `
-      INSERT INTO posts (title, excerpt, content, slug, cover_image_url, author_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO posts (title, excerpt, content, slug, cover_image_url, author_id, category_id, tag_ids)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8::uuid[])
       RETURNING *
     `;
-    const values = [title, excerpt, content, slug, coverImage, user.id];
+    const values = [
+      title,
+      excerpt,
+      content,
+      slug,
+      coverImage,
+      user.id,
+      categoryId,
+      tagIds,
+    ];
 
     const [newPost] = await sql(query, values);
 
