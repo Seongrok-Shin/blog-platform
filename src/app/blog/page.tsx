@@ -10,6 +10,7 @@ import Pagination from "@/components/Pagination";
 import CategoryFilter from "@/components/CategoryFilter";
 import TagFilter from "@/components/TagFilter"; // Import your TagFilter component
 import type { Tag } from "@/types/tag";
+
 export default function BlogPage() {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<PostCardProps[]>([]);
@@ -120,7 +121,14 @@ export default function BlogPage() {
       />
       <TagFilter
         tags={tags} // Pass tags as an array
-        onTagSelect={(tagId) => setSelectedTags([tagId])} // Handle tag selection
+        onTagSelect={(tagName) => {
+          // Toggle tag selection
+          setSelectedTags((prevSelectedTags) =>
+            prevSelectedTags.includes(tagName)
+              ? prevSelectedTags.filter((tag) => tag !== tagName)
+              : [...prevSelectedTags, tagName],
+          );
+        }}
       />
       <PostList posts={posts} />
       {session && (

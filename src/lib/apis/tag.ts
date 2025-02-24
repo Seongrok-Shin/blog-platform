@@ -1,8 +1,8 @@
 import sql from "@/lib/db";
 import slugify from "slugify";
-import { Post } from "@/types/blog";
 import { Tag, UpdateTagInput } from "@/types/tag";
 import { revalidatePath } from "next/cache";
+import { Post } from "@/types/blog";
 
 export async function createSlug(name: string) {
   return slugify(name, { lower: true, strict: true });
@@ -88,17 +88,33 @@ export async function deleteTag(id: string) {
     throw new Error("Failed to delete tag");
   }
 }
-export async function getPostsByTags(tagIds: string[]): Promise<Post[]> {
+
+export async function getPostsByTags(tagName: string): Promise<Post[]> {
   try {
-    // SQL query to fetch posts based on the tag_ids
-    const posts: Post[] = (await sql`
+    // Find the tag ID based on the tag name
+    const tag = (await sql`
+      SELECT id FROM tags WHERE LOWER(name) = LOWER(${tagName})
+    `) as unknown as { id: string }[];
+
+    if (tag.length === 0) {
+      return []; // No matching tag found
+    }
+
+    const tagId = tag[0].id;
+    console.log("Tag ID fetched:", tagId); // Log the tag ID
+
+    // Fetch posts where tag_ids array contains the selected tag ID
+    const posts = (await sql`
       SELECT * FROM posts
-      WHERE tag_ids @> ARRAY[${tagIds}]::uuid[]  -- Ensure tag_ids is an array of UUIDs
+      WHERE ${tagId} = ANY(tag_ids)
       ORDER BY created_at DESC
+      LIMIT 6
     `) as unknown as Post[];
+
+    console.log("Posts fetched:", posts); // Log the posts fetched
     return posts;
   } catch (error) {
-    console.error("Error fetching posts by tags:", error);
-    throw new Error("Failed to fetch posts by tags");
+    console.error("Error fetching posts by tag:", error);
+    throw new Error("Failed to fetch posts by tag");
   }
 }
