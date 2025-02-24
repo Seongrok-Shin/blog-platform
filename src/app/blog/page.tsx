@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2025 Seongrok Shin
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 "use client";
 
 import { useSession } from "next-auth/react";
@@ -13,29 +7,69 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { PostCardProps } from "@/types/blog";
 import BottomSearchBar from "@/components/BottomSearchBar";
 import Pagination from "@/components/Pagination";
+import CategoryFilter from "@/components/CategoryFilter";
+import TagFilter from "@/components/TagFilter"; // Import your TagFilter component
+import type { Tag } from "@/types/tag";
 
 export default function BlogPage() {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<PostCardProps[]>([]);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState<Tag[]>([]); // Assuming tags are strings
   const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalPosts: 0,
   });
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1");
   const isMobile = window.innerWidth < 768;
 
+  // Fetch Categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/category");
+
+        if (!response.ok) {
+          throw new Error(`Error fetching categories: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setCategories(data);
+      } catch (e) {
+        console.error("Error fetching categories:", e);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Fetch Posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const limit = isMobile ? 3 : 6;
-        const response = await fetch(`/api/posts?page=${page}&limit=${limit}`);
+        let url = `/api/posts?page=${page}&limit=${limit}`;
+
+        if (selectedCategory) {
+          url += `&category=${selectedCategory}`;
+        }
+
+        if (selectedTags.length) {
+          url += `&tags=${selectedTags.join(",")}`;
+        }
+
+        const response = await fetch(url);
+
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
         }
+
         const data = await response.json();
         setPosts(data.posts);
         setPagination(data.pagination);
@@ -47,7 +81,27 @@ export default function BlogPage() {
     };
 
     fetchPosts();
-  }, [page, isMobile]);
+  }, [page, isMobile, selectedCategory, selectedTags]);
+
+  // Fetch Tags
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await fetch("/api/tags");
+
+        if (!response.ok) {
+          throw new Error(`Error fetching tags: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setTags(data);
+      } catch (e) {
+        console.error("Error fetching tags:", e);
+      }
+    };
+
+    fetchTags();
+  }, []);
 
   if (isLoading) {
     return <div className="text-center py-8">Loading posts...</div>;
@@ -61,6 +115,21 @@ export default function BlogPage() {
           Explore our latest posts and insights.
         </p>
       </div>
+      <CategoryFilter
+        categories={categories}
+        onCategorySelect={setSelectedCategory}
+      />
+      <TagFilter
+        tags={tags} // Pass tags as an array
+        onTagSelect={(tagName) => {
+          // Toggle tag selection
+          setSelectedTags((prevSelectedTags) =>
+            prevSelectedTags.includes(tagName)
+              ? prevSelectedTags.filter((tag) => tag !== tagName)
+              : [...prevSelectedTags, tagName],
+          );
+        }}
+      />
       <PostList posts={posts} />
       {session && (
         <button

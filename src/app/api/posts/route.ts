@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, excerpt, content, coverImage } = body;
+    const { title, excerpt, content, coverImage, categoryId, tagIds } = body;
     if (!title || !excerpt) {
       return NextResponse.json(
         { error: "Missing title or excerpt" },
@@ -60,11 +60,20 @@ export async function POST(request: Request) {
     }
 
     const query = `
-      INSERT INTO posts (title, excerpt, content, slug, cover_image_url, author_id)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO posts (title, excerpt, content, slug, cover_image_url, author_id, category_id, tag_ids)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8::uuid[])
       RETURNING *
     `;
-    const values = [title, excerpt, content, slug, coverImage, user.id];
+    const values = [
+      title,
+      excerpt,
+      content,
+      slug,
+      coverImage,
+      user.id,
+      categoryId,
+      tagIds,
+    ];
 
     const [newPost] = await sql(query, values);
 
@@ -92,22 +101,60 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "6");
-
     const offset = (page - 1) * limit;
+    const tags = searchParams.get("tags");
+    const category = searchParams.get("category");
+    let whereClause = "";
+    const queryParams: (string | number | string[])[] = [limit, offset];
+    const countParams: string[][] = [];
+
+    // Handle category filter
+    if (category) {
+      const categoryParamIndex = queryParams.length + 1; // $3 if tags are present
+      whereClause += `WHERE p.category_id = $${categoryParamIndex}::uuid`;
+      queryParams.push(category);
+    }
+
+    // Handle tag filter
+    if (tags) {
+      const tagArray = tags.split(",").map((tag) => tag.trim());
+      const tagParamIndex = queryParams.length + 1; // $3 or $4 based on category presence
+      whereClause += ` ${category ? "AND" : "WHERE"} EXISTS (
+        SELECT 1 
+        FROM tags 
+        WHERE tags.id::uuid = ANY(p.tag_ids) 
+        AND tags.name = ANY($${tagParamIndex}::varchar[])
+      )`;
+      queryParams.push(tagArray);
+      countParams.push(tagArray);
+    }
 
     const query = `
       SELECT p.*, u.name as author_name, u.image as author_image
       FROM posts p
       JOIN users u ON p.author_id = u.id
+      ${whereClause}
       ORDER BY p.created_at DESC
       LIMIT $1 OFFSET $2
     `;
 
-    const result = await sql(query, [limit, offset]);
+    const result = await sql(query, queryParams);
 
-    // Get total count for pagination
-    const countQuery = `SELECT COUNT(*) FROM posts`;
-    const [countResult] = await sql(countQuery);
+    const countQuery = `
+      SELECT COUNT(*) FROM posts p 
+      ${
+        tags
+          ? `WHERE EXISTS (
+        SELECT 1 
+        FROM tags 
+        WHERE tags.id::uuid = ANY(p.tag_ids) 
+        AND tags.name = ANY($1::varchar[])
+      )`
+          : ""
+      }
+    `;
+
+    const [countResult] = await sql(countQuery, countParams);
     const totalPosts = parseInt(countResult.count);
 
     return NextResponse.json(
