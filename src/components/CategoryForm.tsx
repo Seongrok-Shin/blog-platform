@@ -25,7 +25,7 @@ export default function CategoryForm() {
       }
 
       setFormData({ name: "", description: "" });
-      // Optionally, show success notification
+      window.location.reload();
     } catch (error) {
       console.error("Error creating category:", error);
     }

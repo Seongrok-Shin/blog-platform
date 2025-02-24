@@ -28,6 +28,7 @@ export default function TagForm() {
       }
 
       setName("");
+      window.location.reload();
     } catch (error) {
       console.error("Error creating tag:", error);
       setError(error instanceof Error ? error.message : "Failed to create tag");

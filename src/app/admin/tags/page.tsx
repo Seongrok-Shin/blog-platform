@@ -1,9 +1,23 @@
-import { getTags } from "@/lib/apis/tag";
+"use client";
+
+import { useState, useEffect } from "react";
 import TagForm from "@/components/TagForm";
 import TagList from "@/components/TagList";
 
-export default async function TagsPage() {
-  const tags = await getTags();
+export default function TagsPage() {
+  const [tags, setTags] = useState([]);
+  useEffect(() => {
+    fetchTags();
+  }, []);
+  const fetchTags = async () => {
+    try {
+      const response = await fetch("/api/tags");
+      const data = await response.json();
+      setTags(data);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6">

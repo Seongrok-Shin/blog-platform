@@ -1,7 +1,6 @@
 "use client";
 
 import { Tag } from "@/types/tag";
-import { deleteTag } from "@/lib/apis/tag";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -24,7 +23,13 @@ export default function TagList({ tags }: TagListProps) {
   const handleDelete = async (id: string) => {
     try {
       setIsLoading(id);
-      await deleteTag(id);
+      await fetch(`/api/tags?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      window.location.reload();
     } catch (error) {
       console.error("Failed to delete tag:", error);
     } finally {

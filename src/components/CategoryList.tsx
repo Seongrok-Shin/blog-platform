@@ -1,7 +1,6 @@
 "use client";
 
 import { Category } from "@/types/category";
-import { deleteCategory } from "@/lib/apis/category";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -24,7 +23,13 @@ export default function CategoryList({ categories }: CategoryListProps) {
   const handleDelete = async (id: string) => {
     try {
       setIsLoading(id);
-      await deleteCategory(id);
+      await fetch(`/api/category?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      window.location.reload();
     } catch (error) {
       console.error("Failed to delete category:", error);
     } finally {
