@@ -1,7 +1,7 @@
 "use client";
 
 import { Tag } from "@/types/tag";
-import { deleteTag } from "@/app/api/tags/route";
+import { deleteTag } from "@/lib/apis/tag";
 import { Button } from "@/components/ui/button";
 import {
   Table,

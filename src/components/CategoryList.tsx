@@ -1,7 +1,7 @@
 "use client";
 
 import { Category } from "@/types/category";
-import { deleteCategory } from "@/app/api/category/route";
+import { deleteCategory } from "@/lib/apis/category";
 import { Button } from "@/components/ui/button";
 import {
   Table,

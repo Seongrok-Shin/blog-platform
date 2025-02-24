@@ -1,4 +1,4 @@
-import { getCategories } from "@/app/api/category/route";
+import { getCategories } from "@/lib/apis/category";
 import CategoryForm from "@/components/CategoryForm";
 import CategoryList from "@/components/CategoryList";
 

@@ -1,4 +1,4 @@
-import { getTags } from "@/app/api/tags/route";
+import { getTags } from "@/lib/apis/tag";
 import TagForm from "@/components/TagForm";
 import TagList from "@/components/TagList";
 
