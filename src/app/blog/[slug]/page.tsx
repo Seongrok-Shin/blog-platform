@@ -6,6 +6,7 @@ import type { PostCardProps } from "@/types/blog";
 import DeleteButton from "@/components/blog/DeleteButton";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/authOptions";
+import CommentsSection from "@/components/Comment";
 
 async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
   try {
@@ -92,6 +93,7 @@ export default async function BlogPostPage({
         </div>
         <span className="text-sm font-medium">{post.author.name}</span>
       </div>
+      <CommentsSection postId={post.id} />
       <Link
         href="/blog"
         className="mt-8 inline-block text-primary hover:underline"
