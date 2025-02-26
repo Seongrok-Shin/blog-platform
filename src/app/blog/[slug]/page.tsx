@@ -7,14 +7,15 @@ import DeleteButton from "@/components/blog/DeleteButton";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/authOptions";
 import CommentsSection from "@/components/Comment";
+import LikeButton from "@/components/LikeButton";
 
 async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
   try {
     const query = `
-      SELECT p.*, u.name as author_name, u.email as author_email, u.image as author_image
-      FROM posts p
-      JOIN users u ON p.author_id = u.id
-      WHERE p.slug = $1
+    SELECT p.*, u.id as author_id, u.name as author_name, u.email as author_email, u.image as author_image
+    FROM posts p
+    JOIN users u ON p.author_id = u.id
+    WHERE p.slug = $1
     `;
     const result = await sql(query, [slug]);
 
@@ -57,7 +58,6 @@ export default async function BlogPostPage({
   }
 
   const isAuthor = session?.user?.email === post.author.email;
-
   return (
     <article className="mx-auto max-w-3xl px-4 py-8">
       <div className="flex justify-between items-start">
@@ -92,6 +92,7 @@ export default async function BlogPostPage({
           />
         </div>
         <span className="text-sm font-medium">{post.author.name}</span>
+        <LikeButton postId={post.id} userId={session?.user?.id} />
       </div>
       <CommentsSection postId={post.id} />
       <Link

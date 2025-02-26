@@ -32,3 +32,12 @@ export interface PostListProps {
 }
 
 export type PostParams = Promise<{ slug: string }>;
+
+export interface LikeButtonProps {
+  postId: string | number | undefined;
+  userId: string | number | undefined;
+}
+
+export interface LikeData {
+  user_id: string;
+}
