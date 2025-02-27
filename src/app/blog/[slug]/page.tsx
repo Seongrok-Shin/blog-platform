@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/authOptions";
 import CommentsSection from "@/components/Comment";
 import LikeButton from "@/components/LikeButton";
+import SocialShare from "@/components/SocialShare";
 
 async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
   try {
@@ -52,7 +53,11 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   const session = await getServerSession(authOptions);
+  const url =
+    `${process.env.NEXT_PUBLIC_API_URL}blog/${slug}/` ||
+    `localhost:3000/blog/${slug}`;
 
+  console.log(url);
   if (!post) {
     notFound();
   }
@@ -100,6 +105,7 @@ export default async function BlogPostPage({
           {post.author.name}
         </span>
         <LikeButton postId={post.id} userId={session?.user?.id} />
+        <SocialShare title={post.title} url={url} />
       </div>
       <CommentsSection postId={post.id} />
       <Link
