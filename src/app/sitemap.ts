@@ -32,7 +32,7 @@ export default async function sitemap({
       ...posts.map((post): MetadataRoute.Sitemap[number] => {
         return {
           url:
-            `${process.env.NEXT_PUBLIC_API_URL}/blog/${post.slug}/` ||
+            `${process.env.NEXT_PUBLIC_API_URL}blog/${post.slug}/` ||
             `https://localhost:3000/blog/${post.slug}/`,
           lastModified: new Date(
             post.updated_at || post.created_at || post.date,
