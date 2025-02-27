@@ -20,7 +20,7 @@ export default function Pagination({
       {currentPage > 1 && (
         <Link
           href={`/blog?page=${currentPage - 1}&query=${query}`}
-          className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
+          className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
         >
           Previous
         </Link>
@@ -33,7 +33,7 @@ export default function Pagination({
           className={`px-4 py-2 rounded-md ${
             page === currentPage
               ? "bg-primary text-white"
-              : "bg-gray-100 hover:bg-gray-200"
+              : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
           }`}
         >
           {page}
@@ -43,7 +43,7 @@ export default function Pagination({
       {currentPage < totalPages && (
         <Link
           href={`/blog?page=${currentPage + 1}&query=${query}`}
-          className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200"
+          className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
         >
           Next
         </Link>

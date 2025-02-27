@@ -10,11 +10,12 @@ import Pagination from "@/components/Pagination";
 import CategoryFilter from "@/components/CategoryFilter";
 import TagFilter from "@/components/TagFilter"; // Import your TagFilter component
 import type { Tag } from "@/types/tag";
+import type { Category } from "@/types/category";
 
 export default function BlogPage() {
   const { data: session } = useSession();
   const [posts, setPosts] = useState<PostCardProps[]>([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]); // Assuming tags are strings
   const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState({
@@ -39,8 +40,8 @@ export default function BlogPage() {
           throw new Error(`Error fetching categories: ${response.statusText}`);
         }
 
-        const data = await response.json();
-        setCategories(data);
+        const data: Category[] = await response.json();
+        setCategories(Array.isArray(data) ? data : []);
       } catch (e) {
         console.error("Error fetching categories:", e);
       }
@@ -93,8 +94,8 @@ export default function BlogPage() {
           throw new Error(`Error fetching tags: ${response.statusText}`);
         }
 
-        const data = await response.json();
-        setTags(data);
+        const data: Tag[] = await response.json();
+        setTags(Array.isArray(data) ? data : []);
       } catch (e) {
         console.error("Error fetching tags:", e);
       }
@@ -110,8 +111,10 @@ export default function BlogPage() {
   return (
     <div className="py-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold mb-4">Blog</h1>
-        <p className="text-gray-600 mb-8">
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">
+          Blog
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">
           Explore our latest posts and insights.
         </p>
       </div>

@@ -71,7 +71,7 @@ export default function CreatePostPage() {
     const selectedOptions = Array.from(
       e.target.selectedOptions,
       (option) => option.value,
-    ).filter((tag) => tag !== "");
+    );
 
     setFormData((prev) => ({ ...prev, selectedTags: selectedOptions }));
   };
@@ -119,9 +119,7 @@ export default function CreatePostPage() {
           excerpt: formData.excerpt,
           coverImage: imageUrl,
           categoryId: formData.categoryId,
-          tagIds: formData.selectedTags.map((tag) =>
-            Array.isArray(tag) ? tag[0] : tag,
-          ),
+          tagIds: formData.selectedTags,
         }),
       });
 
@@ -135,12 +133,10 @@ export default function CreatePostPage() {
       console.log("📌 Sending Data:", {
         title: formData.title,
         content: formData.content,
-        excerpt: formData.excerpt,
-        coverImage: imageUrl,
+        excerpt: imageUrl,
+        coverImage: null,
         categoryId: formData.categoryId,
-        tagIds: formData.selectedTags.map((tag) =>
-          Array.isArray(tag) ? tag[0] : tag,
-        ),
+        tagIds: formData.selectedTags,
       });
 
       const postData = await postResponse.json();
@@ -158,13 +154,15 @@ export default function CreatePostPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-8">Create New Post</h1>
+    <div className="max-w-4xl mx-auto py-12 px-4 dark:bg-gray-800 dark:text-gray-100">
+      <h1 className="text-3xl font-bold mb-8 dark:text-gray-50">
+        Create New Post
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Title
           </label>
@@ -175,14 +173,14 @@ export default function CreatePostPage() {
             required
             value={formData.title}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
           />
         </div>
 
         <div>
           <label
             htmlFor="categoryId"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Category
           </label>
@@ -191,7 +189,7 @@ export default function CreatePostPage() {
             id="categoryId"
             value={formData.categoryId}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
           >
             <option value={""}>Select a category</option>
             {categories.map((category) => (
@@ -205,17 +203,17 @@ export default function CreatePostPage() {
         <div>
           <label
             htmlFor="tags"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Tags (Multiple)
           </label>
           <select
-            name="tags"
+            name="selectedTags"
             id="tags"
             multiple
             value={formData.selectedTags}
             onChange={handleTagChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             size={4}
           >
             {tags.map((tag) => (
@@ -224,7 +222,7 @@ export default function CreatePostPage() {
               </option>
             ))}
           </select>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Hold Ctrl (Cmd on Mac) to select multiple tags
           </p>
         </div>
@@ -232,7 +230,7 @@ export default function CreatePostPage() {
         <div>
           <label
             htmlFor="excerpt"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Summary
           </label>
@@ -242,7 +240,7 @@ export default function CreatePostPage() {
             required
             value={formData.excerpt}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             rows={3}
             maxLength={100}
           />
@@ -251,7 +249,7 @@ export default function CreatePostPage() {
         <div>
           <label
             htmlFor="content"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Content
           </label>
@@ -261,7 +259,7 @@ export default function CreatePostPage() {
             required
             value={formData.content}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             rows={10}
           />
         </div>
@@ -269,7 +267,7 @@ export default function CreatePostPage() {
         <div>
           <label
             htmlFor="coverImage"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Cover Image
           </label>
@@ -279,7 +277,7 @@ export default function CreatePostPage() {
             id="coverImage"
             accept="image/*"
             onChange={handleFileChange}
-            className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            className="mt-1 block w-full text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 focus:outline-none"
           />
         </div>
 

@@ -38,7 +38,7 @@ export default function CategoryList({ categories }: CategoryListProps) {
   };
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border dark:text-gray-500">
       <Table>
         <TableHeader>
           <TableRow>

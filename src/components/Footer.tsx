@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 const navigation = {
   main: [
@@ -34,8 +38,11 @@ const navigation = {
 };
 
 export default function Footer() {
+  const { theme } = useTheme();
+  useEffect(() => {}, [theme]);
+
   return (
-    <footer className="bg-white bottom-0 w-full">
+    <footer className="bg-white dark:bg-gray-800 bottom-0 w-full">
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           {/* Navigation */}
@@ -45,7 +52,7 @@ export default function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm text-gray-600 hover:text-gray-900"
+                    className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   >
                     {item.name}
                   </Link>
@@ -63,14 +70,14 @@ export default function Footer() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-gray-500"
+                  className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
                 </Link>
               ))}
             </div>
-            <p className="mt-4 text-center text-xs text-gray-500 sm:mt-2">
+            <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400 sm:mt-2">
               &copy; {new Date().getFullYear()} Blog Platform. All rights
               reserved.
             </p>

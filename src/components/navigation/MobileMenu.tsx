@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import type { MobileMenuProps } from "@/types/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
@@ -20,14 +21,17 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       />
 
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg sm:hidden z-[1001]">
+      <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-lg sm:hidden z-[1001]">
         <div className="flex h-16 items-center justify-between px-4">
-          <Link href="/" className="text-xl font-bold text-gray-900">
+          <Link
+            href="/"
+            className="text-xl font-bold text-gray-900 dark:text-white"
+          >
             Blog Platform
           </Link>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
           >
             <span className="sr-only">Close menu</span>
             <svg
@@ -46,7 +50,10 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </button>
         </div>
 
-        <nav className="px-4 py-4">
+        <nav className="px-4">
+          <div className="px-2">
+            <ThemeToggle />
+          </div>
           <div className="space-y-1">
             {[
               { href: "/", label: "Home" },
@@ -61,7 +68,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
                   pathname === href
                     ? "bg-primary/5 text-primary"
-                    : "text-gray-700 hover:bg-gray-50"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 }`}
               >
                 {label}
@@ -69,20 +76,20 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             ))}
           </div>
 
-          <div className="mt-8 border-t border-gray-200 pt-4">
+          <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-4">
             <div className="space-y-1">
               {session?.user ? (
                 <>
                   <Link
                     href="/profile"
                     onClick={onClose}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
                     Profile
                   </Link>
                   <button
                     onClick={() => signOut()}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 w-full text-left"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 w-full text-left"
                   >
                     Logout
                   </button>
@@ -92,7 +99,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/login"
                     onClick={onClose}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
                     Log in
                   </Link>

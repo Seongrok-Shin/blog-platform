@@ -9,6 +9,9 @@ const nextConfig = {
     unoptimized: process.env.NODE_ENV !== "production",
   },
   // Add any other configuration options below
+  experimental: {
+    appDir: false,
+  },
 };
 
 module.exports = nextConfig;

@@ -6,6 +6,12 @@ import TagList from "@/components/TagList";
 
 export default function TagsPage() {
   const [tags, setTags] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   useEffect(() => {
     fetchTags();
   }, []);
@@ -22,7 +28,7 @@ export default function TagsPage() {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Manage Tags</h1>
-      <div className="grid gap-6">
+      <div className={`flex ${isMobile ? "grid gap-6" : "flex-col gap-6"}`}>
         <TagForm />
         <TagList tags={tags} />
       </div>

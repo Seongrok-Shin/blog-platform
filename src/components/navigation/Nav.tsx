@@ -5,6 +5,7 @@ import { useState } from "react";
 import NavLink from "./NavLink";
 import { useSession, signOut } from "next-auth/react";
 import MobileMenu from "./MobileMenu";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const navigationItems = [
   { href: "/", label: "Home" },
@@ -22,13 +23,16 @@ export default function Nav() {
   };
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
+    <nav className="border-b border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           {/* Logo and primary nav */}
           <div className="flex">
             <div className="flex flex-shrink-0 items-center">
-              <Link href="/" className="text-xl font-bold text-gray-900">
+              <Link
+                href="/"
+                className="text-xl font-bold text-gray-900 dark:text-white"
+              >
                 Blog Platform
               </Link>
             </div>
@@ -48,7 +52,7 @@ export default function Nav() {
               <>
                 <Link
                   href="/profile"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Profile
                 </Link>
@@ -63,7 +67,7 @@ export default function Nav() {
               <>
                 <Link
                   href="/login"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Log in
                 </Link>
@@ -75,13 +79,14 @@ export default function Nav() {
                 </Link>
               </>
             )}
+            <ThemeToggle />
           </div>
 
           {/* Mobile menu button */}
           <button
             aria-label="Open main menu"
             onClick={onOpenMobileMenu}
-            className="sm:hidden p-2 text-gray-500 hover:text-gray-700"
+            className="sm:hidden p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
           >
             <svg
               className="h-6 w-6"
@@ -89,6 +94,7 @@ export default function Nav() {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"

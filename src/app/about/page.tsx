@@ -3,21 +3,21 @@ import Link from "next/link";
 
 const AboutPage: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 dark:bg-gray-900 dark:text-gray-100">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl font-bold text-gray-800">
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-50">
           About My Blog Platform
         </h1>
-        <p className="mt-2 text-xl text-gray-600">
+        <p className="mt-2 text-xl text-gray-600 dark:text-gray-400">
           Empowering voices, connecting ideas
         </p>
       </header>
 
       <section className="mb-12">
-        <h2 className="text-3xl font-semibold mb-4 text-gray-800">
+        <h2 className="text-3xl font-semibold mb-4 text-gray-800 dark:text-gray-50">
           My Mission
         </h2>
-        <p className="text-lg text-gray-700 leading-relaxed">
+        <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
           I dedicated to providing a powerful, user-friendly platform where
           bloggers of all levels can create, share, and grow their online
           presence. Our goal is to foster a vibrant community of writers and
@@ -36,10 +36,10 @@ const AboutPage: React.FC = () => {
           />
         </div>
         <div className="md:w-1/2">
-          <h2 className="text-3xl font-semibold mb-4 text-gray-800">
+          <h2 className="text-3xl font-semibold mb-4 text-gray-800 dark:text-gray-50">
             Who I Am
           </h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
+          <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             I am a passionate developer, designer, and content creator who
             believe in the power of words. With our combined expertise in
             technology and digital publishing, I have built a platform that puts
@@ -49,7 +49,7 @@ const AboutPage: React.FC = () => {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-3xl font-semibold mb-4 text-gray-800">
+        <h2 className="text-3xl font-semibold mb-4 text-gray-800 dark:text-gray-50">
           What Sets Me Apart
         </h2>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -59,7 +59,10 @@ const AboutPage: React.FC = () => {
             "Search functionality for finding content",
             "Authentication and authorization for secure access",
           ].map((feature, index) => (
-            <li key={index} className="flex items-center text-lg text-gray-700">
+            <li
+              key={index}
+              className="flex items-center text-lg text-gray-700 dark:text-gray-300"
+            >
               <svg
                 className="w-6 h-6 mr-2 text-green-500"
                 fill="none"
@@ -81,10 +84,10 @@ const AboutPage: React.FC = () => {
       </section>
 
       <section className="text-center">
-        <h2 className="text-3xl font-semibold mb-4 text-gray-800">
+        <h2 className="text-3xl font-semibold mb-4 text-gray-800 dark:text-gray-50">
           Ready to Start Your Blogging Journey?
         </h2>
-        <p className="text-lg text-gray-700 mb-6">
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
           Join my community today and turn your ideas into impactful content.
         </p>
         <Link
