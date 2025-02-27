@@ -43,7 +43,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-white dark:bg-gray-800 bottom-0 w-full">
-      <div className="mx-auto max-w-7xl px-6 py-12">
+      <div className="mx-auto max-w-7xl px-6 py-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           {/* Navigation */}
           <nav className="flex justify-center" aria-label="Footer">
@@ -62,7 +62,7 @@ export default function Footer() {
           </nav>
 
           {/* Social and Copyright */}
-          <div className="mt-6 flex flex-col items-center sm:mt-0 sm:items-end">
+          <div className=" flex flex-col items-center sm:mt-0 sm:items-end">
             <div className="mt-4 flex space-x-6 sm:mt-0">
               {navigation.social.map((item) => (
                 <Link
