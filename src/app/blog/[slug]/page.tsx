@@ -8,7 +8,42 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/authOptions";
 import CommentsSection from "@/components/Comment";
 import LikeButton from "@/components/LikeButton";
+import { Metadata } from "next";
 import SocialShare from "@/components/SocialShare";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "Blog Post Not Found",
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: `${process.env.NEXT_PUBLIC_API_URL}blog/${slug}`,
+      images: [
+        {
+          url: post.coverImageUrl || "",
+          alt: post.title,
+        },
+      ],
+      type: "article",
+      authors: [post.author.name],
+      publishedTime: new Date(post.createdAt).toISOString(),
+    },
+  };
+}
 
 async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
   try {
@@ -48,7 +83,7 @@ async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
