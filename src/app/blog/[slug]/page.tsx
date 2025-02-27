@@ -10,6 +10,7 @@ import CommentsSection from "@/components/Comment";
 import LikeButton from "@/components/LikeButton";
 import { Metadata } from "next";
 import SocialShare from "@/components/SocialShare";
+import RelatedPosts from "@/components/blog/RelatedPost";
 
 export async function generateMetadata({
   params,
@@ -73,10 +74,47 @@ async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
         email: post.author_email,
         profileImageUrl: post.author_image || "/profile/profile-default.svg",
       },
+      categoryId: post.category_id,
     };
   } catch (error) {
     console.error("Error fetching post:", error);
     return null;
+  }
+}
+
+async function getRelatedPosts(
+  categoryId: string,
+  currentPostId: number,
+): Promise<PostCardProps[]> {
+  try {
+    const query = `
+      SELECT p.*, u.name as author_name, u.image as author_image
+      FROM posts p
+      JOIN users u ON p.author_id = u.id
+      WHERE p.category_id = $1 AND p.id != $2
+      ORDER BY p.created_at DESC
+      LIMIT 3
+    `;
+    const result = await sql(query, [categoryId, currentPostId]);
+
+    return result.map((post) => ({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      excerpt: post.excerpt,
+      slug: post.slug,
+      createdAt: post.created_at.toISOString(),
+      coverImageUrl: post.cover_image_url,
+      author: {
+        name: post.author_name,
+        email: post.author_email,
+        profileImageUrl: post.author_image || "/profile/profile-default.svg",
+      },
+      categoryId: post.category_id,
+    }));
+  } catch (error) {
+    console.error("Error fetching related posts:", error);
+    return [];
   }
 }
 
@@ -93,7 +131,7 @@ export default async function BlogPostPage({
   if (!post) {
     notFound();
   }
-
+  const relatedPosts = await getRelatedPosts(post.categoryId, post.id);
   const isAuthor = session?.user?.email === post.author.email;
   return (
     <article className="mx-auto max-w-3xl px-4 py-8 dark:bg-black-800 dark:text-gray-100">
@@ -140,6 +178,7 @@ export default async function BlogPostPage({
         <SocialShare title={post.title} url={url} />
       </div>
       <CommentsSection postId={post.id} />
+      <RelatedPosts posts={relatedPosts} />
       <Link
         href="/blog"
         className="mt-8 inline-block text-primary hover:underline"

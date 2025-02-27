@@ -12,6 +12,7 @@ export interface PostCardProps {
     name: string;
     profileImageUrl: string;
   };
+  categoryId: string;
   coverImageUrl?: string;
 }
 
