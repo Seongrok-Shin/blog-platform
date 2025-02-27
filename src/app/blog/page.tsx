@@ -11,6 +11,7 @@ import CategoryFilter from "@/components/CategoryFilter";
 import TagFilter from "@/components/TagFilter"; // Import your TagFilter component
 import type { Tag } from "@/types/tag";
 import type { Category } from "@/types/category";
+import Loading from "@/components/Loading";
 
 export default function BlogPage() {
   const { data: session } = useSession();
@@ -105,7 +106,11 @@ export default function BlogPage() {
   }, []);
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading posts...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   return (

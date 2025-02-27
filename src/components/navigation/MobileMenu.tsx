@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import type { MobileMenuProps } from "@/types/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
+import BookmarkIcon from "../blog/BookmarkIcon";
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
@@ -51,10 +52,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </div>
 
         <nav className="px-4">
-          <div className="px-2">
-            <ThemeToggle />
-          </div>
           <div className="space-y-1">
+            <ThemeToggle />
             {[
               { href: "/", label: "Home" },
               { href: "/blog", label: "Blog" },
@@ -80,6 +79,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <div className="space-y-1">
               {session?.user ? (
                 <>
+                  <Link
+                    href="/bookmarks"
+                    onClick={onClose}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    {BookmarkIcon()}
+                  </Link>
                   <Link
                     href="/profile"
                     onClick={onClose}
