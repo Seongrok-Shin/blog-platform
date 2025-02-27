@@ -1,17 +1,9 @@
 import sql from "@/lib/db";
-import { PostParams } from "@/types/blog";
 import { MetadataRoute } from "next";
 
-export default async function sitemap({
-  id,
-}: {
-  id: number;
-  params: PostParams;
-}): Promise<MetadataRoute.Sitemap> {
-  const pageSize = 50000;
-  const start = (id - 1) * pageSize;
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts =
-    await sql`SELECT id, updated_at, slug FROM posts ORDER BY created_at DESC LIMIT ${pageSize} OFFSET ${start}`;
+    await sql`SELECT id, updated_at, slug FROM posts ORDER BY created_at DESC LIMIT 50000 OFFSET 0`;
 
   if (!posts || posts.length === 0) {
     return [];
