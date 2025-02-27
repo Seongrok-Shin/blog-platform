@@ -6,11 +6,11 @@ A modern, full-stack blog platform built with Next.js 14, TypeScript, and Tailwi
 
 - 📝 Modern blog editor with rich text formatting
 - 🎨 Responsive design with Tailwind CSS
-- 🔒 Authentication and user management (coming soon)
+- 🔒 Authentication and user management
 - 📱 Mobile-friendly interface
 - 🚀 Server-side rendering for optimal performance
 - 💾 Database integration
-- 🔍 SEO optimized (coming soon)
+- 🔍 SEO optimized
 
 ## Tech Stack
 
