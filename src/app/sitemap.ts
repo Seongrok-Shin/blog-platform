@@ -18,20 +18,22 @@ export default async function sitemap({
   } else {
     return [
       {
-        url: "https://localhost:3000/",
+        url: process.env.NEXT_PUBLIC_API_URL || "https://localhost:3000/",
         lastModified: new Date(),
         changeFrequency: "yearly",
         priority: 1,
       },
       {
-        url: "https://localhost:3000/blog/",
+        url: process.env.NEXT_PUBLIC_API_URL || "https://localhost:3000/",
         lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 0.8,
       },
       ...posts.map((post): MetadataRoute.Sitemap[number] => {
         return {
-          url: `https://localhost:3000/blog/${post.slug}/`,
+          url:
+            `${process.env.NEXT_PUBLIC_API_URL}/blog/${post.slug}/` ||
+            `https://localhost:3000/blog/${post.slug}/`,
           lastModified: new Date(
             post.updated_at || post.created_at || post.date,
           ).toISOString(),
