@@ -32,14 +32,6 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-node-
 
-      - name: Cache Next.js build
-        uses: actions/cache@v3
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-
       - name: Install dependencies
         run: npm ci
 
@@ -51,30 +43,6 @@ jobs:
           if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null ; then
             echo "Port 3000 is in use. Terminating existing process."
             lsof -ti:3000 | xargs kill -9
-          fi
-
-      - name: Build and start Next.js
-        run: |
-          npm run build
-          npm run start > server.log 2>&1 &
-          sleep 10
-          cat server.log
-        env:
-          PORT: 3000
-
-      - name: Wait for Next.js to be ready
-        run: |
-          timeout 60s bash -c 'until curl -sSf http://localhost:3000 >/dev/null; do sleep 5; echo "Waiting for Next.js to be ready..."; done'
-        continue-on-error: true
-
-      - name: Check server status
-        run: |
-          if curl -sSf http://localhost:3000 >/dev/null; then
-            echo "Server is up and running"
-          else
-            echo "Server failed to start. Here are the logs:"
-            cat server.log
-            exit 1
           fi
 
       - name: Run Playwright tests with tracing
