@@ -8,11 +8,11 @@ const TagFilter: React.FC<TagFilterProps> = ({
     <div>
       {tags.map((tag) => (
         <button
-          key={tag.id} // Assuming `tag` has an `id` property
-          onClick={() => onTagSelect(tag.name)} // Use `tag.name` if you want to pass the name to `onTagSelect`
-          className="bg-gray-200 rounded-md p-2 m-2"
+          key={tag.id}
+          onClick={() => onTagSelect(tag.name)}
+          className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md p-2 m-2"
         >
-          {tag.name} {/* Render the `name` of the tag */}
+          {tag.name}
         </button>
       ))}
     </div>

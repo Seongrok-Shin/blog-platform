@@ -51,7 +51,9 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId, userId }) => {
     <button
       onClick={handleLike}
       className={`flex items-center gap-2 p-2 rounded-lg ${
-        liked ? "bg-red-500 text-white" : "bg-gray-200 hover:bg-gray-300"
+        liked
+          ? "bg-red-500 text-white"
+          : "bg-gray-200 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
       }`}
     >
       ❤️ {likes}

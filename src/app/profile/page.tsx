@@ -17,9 +17,9 @@ export default function ProfilePage() {
   if (status === "loading") return <p>Loading...</p>;
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-        <div className="bg-white rounded-lg shadow-md p-6 max-w-md w-full">
-          <p className="text-center text-lg text-gray-700 mb-4">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800 p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-md w-full">
+          <p className="text-center text-lg text-gray-700 dark:text-gray-300 mb-4">
             You are not logged in.
           </p>
           <button
@@ -36,15 +36,17 @@ export default function ProfilePage() {
   const user = session.user;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-md w-full max-w-2xl p-6">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-800 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md w-full max-w-2xl p-6">
         <div className="flex flex-col items-center justify-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Profile</h1>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-50 mb-2">
+            Profile
+          </h1>
           <div className="w-32 h-32 relative mb-4">
             <Image
               src={
                 preview ||
-                (user?.image === "/default-profile.png"
+                (user?.image === "/profile/profile-default.svg"
                   ? defaultProfile
                   : user?.image) ||
                 defaultProfile
@@ -56,10 +58,12 @@ export default function ProfilePage() {
             />
           </div>
           <div className="text-center">
-            <p className="text-xl font-semibold text-gray-700">
+            <p className="text-xl font-semibold text-gray-700 dark:text-gray-300">
               {user?.name || "No Name"}
             </p>
-            <p className="text-gray-500">{user?.email || "No Email"}</p>
+            <p className="text-gray-500 dark:text-gray-400">
+              {user?.email || "No Email"}
+            </p>
           </div>
         </div>
 
@@ -92,7 +96,7 @@ export default function ProfilePage() {
           }}
           className="mb-6"
         >
-          <label className="block mb-2 font-semibold text-gray-700">
+          <label className="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
             Change Profile Image:
           </label>
           <input
@@ -105,7 +109,7 @@ export default function ProfilePage() {
                 setPreview(URL.createObjectURL(files[0]));
               }
             }}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold file:bg-gray-50 hover:file:bg-gray-100 mb-2"
+            className="block w-full text-sm text-gray-500 file:bg-sky-500/75 file:text-white dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 dark:file:border-gray-700 file:rounded-md file:text-sm file:font-semibold file:bg-gray-800 dark:file:bg-gray-700 mb-2 focus"
           />
           {error && <p className="text-red-500 mb-2">{error}</p>}
           <button

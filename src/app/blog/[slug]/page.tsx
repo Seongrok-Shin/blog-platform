@@ -12,7 +12,7 @@ import LikeButton from "@/components/LikeButton";
 async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
   try {
     const query = `
-    SELECT p.*, u.id as author_id, u.name as author_name, u.email as author_email, u.image as author_image
+    SELECT p.*, u.name as author_name, u.email as author_email, u.image as author_image
     FROM posts p
     JOIN users u ON p.author_id = u.id
     WHERE p.slug = $1
@@ -59,12 +59,14 @@ export default async function BlogPostPage({
 
   const isAuthor = session?.user?.email === post.author.email;
   return (
-    <article className="mx-auto max-w-3xl px-4 py-8">
+    <article className="mx-auto max-w-3xl px-4 py-8 dark:bg-black-800 dark:text-gray-100">
       <div className="flex justify-between items-start">
-        <h1 className="text-4xl font-bold text-gray-900">{post.title}</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-50">
+          {post.title}
+        </h1>
         {isAuthor && <DeleteButton postId={post.id} />}
       </div>
-      <div className="mt-4 text-gray-600">
+      <div className="mt-4 text-gray-600 dark:text-gray-400">
         <time dateTime={new Date(post.createdAt).toISOString()}>
           {new Date(post.createdAt).toLocaleDateString()}
         </time>
@@ -76,11 +78,14 @@ export default async function BlogPostPage({
             alt={post.title}
             fill
             className="object-cover"
+            sizes="100%"
             priority
           />
         </div>
       )}
-      <p className="mt-6 text-lg text-gray-700">{post.content}</p>
+      <p className="mt-6 text-lg text-gray-700 dark:text-gray-300">
+        {post.content}
+      </p>
       <div className="mt-8 flex items-center gap-4">
         <div className="relative h-10 w-10">
           <Image
@@ -91,7 +96,9 @@ export default async function BlogPostPage({
             sizes="40px"
           />
         </div>
-        <span className="text-sm font-medium">{post.author.name}</span>
+        <span className="text-sm font-medium dark:text-gray-50">
+          {post.author.name}
+        </span>
         <LikeButton postId={post.id} userId={session?.user?.id} />
       </div>
       <CommentsSection postId={post.id} />

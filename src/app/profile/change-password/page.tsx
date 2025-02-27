@@ -41,14 +41,14 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100">
-      <div className="bg-white rounded-lg shadow-md w-full max-w-md p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-800">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md w-full max-w-md p-6">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-50 mb-6 text-center">
           Change Password
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
               Current Password
             </label>
             <input
@@ -56,11 +56,11 @@ export default function ChangePasswordPage() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               required
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
               New Password
             </label>
             <input
@@ -68,11 +68,11 @@ export default function ChangePasswordPage() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">
               Confirm New Password
             </label>
             <input
@@ -80,7 +80,7 @@ export default function ChangePasswordPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
           </div>
           {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -96,7 +96,7 @@ export default function ChangePasswordPage() {
         <div className="mt-4 text-center">
           <button
             onClick={() => router.back()}
-            className="text-sm text-blue-500 hover:underline"
+            className="text-sm text-blue-500 hover:underline dark:text-blue-400"
           >
             Back to Profile
           </button>
