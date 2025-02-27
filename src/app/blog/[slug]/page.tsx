@@ -11,6 +11,7 @@ import LikeButton from "@/components/LikeButton";
 import { Metadata } from "next";
 import SocialShare from "@/components/SocialShare";
 import RelatedPosts from "@/components/blog/RelatedPost";
+import BookmarkButton from "@/components/blog/BookmarkButton";
 
 export async function generateMetadata({
   params,
@@ -139,7 +140,11 @@ export default async function BlogPostPage({
         <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-50">
           {post.title}
         </h1>
-        {isAuthor && <DeleteButton postId={post.id} />}
+        {isAuthor ? (
+          <DeleteButton postId={post.id} />
+        ) : (
+          <BookmarkButton postId={post.id} />
+        )}
       </div>
       <div className="mt-4 text-gray-600 dark:text-gray-400">
         <time dateTime={new Date(post.createdAt).toISOString()}>

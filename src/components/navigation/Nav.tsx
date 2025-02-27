@@ -6,6 +6,7 @@ import NavLink from "./NavLink";
 import { useSession, signOut } from "next-auth/react";
 import MobileMenu from "./MobileMenu";
 import ThemeToggle from "@/components/ThemeToggle";
+import BookmarkIcon from "../blog/BookmarkIcon";
 
 const navigationItems = [
   { href: "/", label: "Home" },
@@ -50,6 +51,12 @@ export default function Nav() {
           <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
             {session?.user ? (
               <>
+                <Link
+                  href="/bookmarks"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                >
+                  {BookmarkIcon()}
+                </Link>
                 <Link
                   href="/profile"
                   className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
