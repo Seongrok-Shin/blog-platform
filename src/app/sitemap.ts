@@ -11,7 +11,7 @@ export default async function sitemap({
   const pageSize = 50000;
   const start = (id - 1) * pageSize;
   const posts =
-    await sql`SELECT id, updated_at, date,slug FROM posts ORDER BY created_at DESC LIMIT ${pageSize} OFFSET ${start}`;
+    await sql`SELECT id, updated_at, slug FROM posts ORDER BY created_at DESC LIMIT ${pageSize} OFFSET ${start}`;
 
   if (!posts || posts.length === 0) {
     return [];
@@ -24,7 +24,9 @@ export default async function sitemap({
         priority: 1,
       },
       {
-        url: process.env.NEXT_PUBLIC_API_URL || "https://localhost:3000/",
+        url:
+          `${process.env.NEXT_PUBLIC_API_URL}blog/` ||
+          `https://localhost:3000/blog/`,
         lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 0.8,
