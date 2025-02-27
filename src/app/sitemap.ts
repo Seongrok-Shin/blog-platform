@@ -1,60 +1,44 @@
 import sql from "@/lib/db";
+import { PostParams } from "@/types/blog";
+import { MetadataRoute } from "next";
 
-export async function GET() {
-  try {
-    const posts = await sql`
-      SELECT slug, updated_at FROM posts
-    `;
+export default async function sitemap({
+  id,
+}: {
+  id: number;
+  params: PostParams;
+}): Promise<MetadataRoute.Sitemap> {
+  const pageSize = 50000;
+  const start = (id - 1) * pageSize;
+  const posts =
+    await sql`SELECT id, date,slug FROM posts ORDER BY created_at DESC LIMIT ${pageSize} OFFSET ${start}`;
 
-    // Explicitly define the type for posts
-    interface Post {
-      slug: string;
-      updated_at: Date;
-    }
-
-    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      <url>
-        <loc>https://blog-platform-rose-nu.vercel.app/</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>1.0</priority>
-      </url>
-      <url>
-        <loc>https://blog-platform-rose-nu.vercel.app/blog</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-      </url>
-      ${(posts as Post[]) // Explicitly cast to the Post[] type
-        .map((post) => {
-          return `
-            <url>
-              <loc>https://blog-platform-rose-nu.vercel.app/blog/${post.slug}</loc>
-              <lastmod>${new Date(post.updated_at).toISOString()}</lastmod>
-              <changefreq>daily</changefreq>
-              <priority>0.7</priority>
-            </url>
-          `;
-        })
-        .join("")}
-    </urlset>`;
-
-    return new Response(sitemap, {
-      headers: {
-        "Content-Type": "application/xml",
-      },
-    });
-  } catch (error) {
-    console.error("Error generating sitemap:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to generate sitemap" }),
+  if (!posts || posts.length === 0) {
+    return [];
+  } else {
+    return [
       {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        url: "https://localhost:3000/",
+        lastModified: new Date(),
+        changeFrequency: "yearly",
+        priority: 1,
       },
-    );
+      {
+        url: "https://localhost:3000/blog/",
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      },
+      ...posts.map((post): MetadataRoute.Sitemap[number] => {
+        return {
+          url: `https://localhost:3000/blog/${post.slug}/`,
+          lastModified: new Date(
+            post.updated_at || post.created_at || post.date,
+          ).toISOString(),
+          changeFrequency: "daily",
+          priority: 0.7,
+        };
+      }),
+    ];
   }
 }
