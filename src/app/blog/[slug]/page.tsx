@@ -14,7 +14,7 @@ import SocialShare from "@/components/SocialShare";
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -83,16 +83,13 @@ async function getPostBySlug(slug: string): Promise<PostCardProps | null> {
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   const session = await getServerSession(authOptions);
-  const url =
-    `${process.env.NEXT_PUBLIC_API_URL}blog/${slug}/` ||
-    `localhost:3000/blog/${slug}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}blog/${slug}/`;
 
-  console.log(url);
   if (!post) {
     notFound();
   }
